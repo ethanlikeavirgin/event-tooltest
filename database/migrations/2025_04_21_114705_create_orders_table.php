@@ -18,6 +18,7 @@ return new class extends Migration
             $table->json('items');
             $table->decimal('total', 10, 2);
             $table->string('guest_token')->nullable();
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

@@ -58,7 +58,6 @@ export default {
             try {
                 const response = await axios.post('/mollie/payment', payload);
                 console.log('Mollie response:', response); // ← debug this
-
                 if (response.data?.checkoutUrl) {
                     window.open(response.data.checkoutUrl, '_blank');
                 } else {
