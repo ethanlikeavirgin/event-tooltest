@@ -37,7 +37,7 @@ class CartController extends Controller
                 'total' => 'required|numeric',
             ]);
 
-            DB::table('orders')->insert([
+            $orderId = DB::table('orders')->insertGetId([
                 'first_name' => $validated['first_name'],
                 'last_name' => $validated['last_name'],
                 'items' => json_encode($validated['items']),
@@ -54,11 +54,13 @@ class CartController extends Controller
                     "currency" => "EUR",
                     "value" => number_format($request->total, 2, '.', ''),
                 ],
-                "description" => "Order #12345",
-                "redirectUrl" => route('cart.success'),
+                "description" => "Order #" . $orderId,
+                "redirectUrl" => route('cart.success', [
+                    'order_id' => $orderId,
+                ]), 
                 "webhookUrl" => route('webhook.mollie'),
                 "metadata" => [
-                    "order_id" => "12345",
+                    "order_id" => $orderId,
                 ],
             ]);
             return response()->json([
