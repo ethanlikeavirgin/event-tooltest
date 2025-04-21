@@ -36,12 +36,13 @@ class CartController extends Controller
                 'items' => 'required|array',
                 'total' => 'required|numeric',
             ]);
-
+            $guestToken = session('guest_token');
             $orderId = DB::table('orders')->insertGetId([
                 'first_name' => $validated['first_name'],
                 'last_name' => $validated['last_name'],
                 'items' => json_encode($validated['items']),
                 'total' => $validated['total'],
+                'guest_token' => $guestToken,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -77,7 +78,8 @@ class CartController extends Controller
     }
     public function success(Request $request)
     {
-        dd($request->order_id);
-        return Inertia::render('Items/Success');
+        $current_id = $request->order_id;
+        $orders = DB::table('orders')->where('id', $current_id);
+        return Inertia::render('Items/Success', ['current_id' => $current_id]);
     }
 }
