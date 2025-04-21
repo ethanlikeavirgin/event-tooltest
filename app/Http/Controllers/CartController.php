@@ -28,25 +28,6 @@ class CartController extends Controller
     }
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'items' => 'required|array',
-            'total' => 'required|numeric',
-            'guest_token' => 'nullable|string',
-        ]);
-
-        // ✅ Insert into orders table
-        DB::table('orders')->insert([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'items' => json_encode($validated['items']),
-            'total' => $validated['total'],
-            'guest_token' => $validated['guest_token'] ?? null,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
         // ✅ Get the inserted order ID
         $orderId = DB::getPdo()->lastInsertId();
 
@@ -65,6 +46,25 @@ class CartController extends Controller
             "metadata" => [
                 "order_id" => $orderId,
             ],
+        ]);
+
+        $validated = $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'items' => 'required|array',
+            'total' => 'required|numeric',
+            'guest_token' => 'nullable|string',
+        ]);
+
+        // ✅ Insert into orders table
+        DB::table('orders')->insert([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'items' => json_encode($validated['items']),
+            'total' => $validated['total'],
+            'guest_token' => $validated['guest_token'] ?? null,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return response()->json([
