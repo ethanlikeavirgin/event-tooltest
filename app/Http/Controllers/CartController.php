@@ -28,51 +28,31 @@ class CartController extends Controller
     }
     public function store(Request $request)
     {
-        // ✅ Get the inserted order ID
-        $orderId = DB::getPdo()->lastInsertId();
-
-        // ✅ Proceed to Mollie payment
         $mollie = new \Mollie\Api\MollieApiClient();
         $mollie->setApiKey("test_bcCAhNsRUbRMgnFJvTfAPWpEdTuKQ2");
 
         $payment = $mollie->payments->create([
             "amount" => [
                 "currency" => "EUR",
-                "value" => number_format($validated['total'], 2, '.', ''),
+                "value" => number_format($request->total, 2, '.', ''),
             ],
-            "description" => "Order #$orderId",
-            "redirectUrl" => route('cart.success'),
+            "description" => "Order #12345",
+            "redirectUrl" => route('cart.success', [
+                'order_id' => "12345",
+                'first_name' => $request->first_name,
+            ]),
             "webhookUrl" => route('webhook.mollie'),
             "metadata" => [
-                "order_id" => $orderId,
+                "order_id" => "12345",
             ],
         ]);
-
-        $validated = $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'items' => 'required|array',
-            'total' => 'required|numeric',
-            'guest_token' => 'nullable|string',
-        ]);
-
-        // ✅ Insert into orders table
-        DB::table('orders')->insert([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'items' => json_encode($validated['items']),
-            'total' => $validated['total'],
-            'guest_token' => $validated['guest_token'] ?? null,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-
         return response()->json([
             'checkoutUrl' => $payment->getCheckoutUrl(),
         ]);
     }
-    public function success()
+    public function success(Request $request)
     {
+        dd($request->first_name);
         return Inertia::render('Items/Success');
     }
 }
