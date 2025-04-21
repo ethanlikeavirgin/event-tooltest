@@ -45,7 +45,8 @@ class CartController extends Controller
         /*return response()->json([
             'checkoutUrl' => $payment->getCheckoutUrl(),
         ]);*/
-        return redirect()->route($payment->getCheckoutUrl())->with('success', 'Item added to cart successfully.');
+        return redirect()->away($payment->getCheckoutUrl());
+
     }
     public function success()
     {
