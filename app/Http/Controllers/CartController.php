@@ -27,13 +27,6 @@ class CartController extends Controller
     }
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
-            'total' => 'required|numeric',
-        ]);
-    
-        dd($validated);
         $mollie = new \Mollie\Api\MollieApiClient();
         $mollie->setApiKey("test_bcCAhNsRUbRMgnFJvTfAPWpEdTuKQ2");
 
