@@ -81,9 +81,10 @@ class CartController extends Controller
         $guest_token = session('guest_token');
         $current_id = $request->order_id;
         $orders = DB::table('orders')->where('id', $current_id)->first();
+        $my_orders = [];
         if($orders->guest_token) {
-            $orders = DB::table('orders')->where('id', $current_id)->where('guest_token', $guest_token)->first();
+            $my_orders = DB::table('orders')->where('id', $current_id)->where('guest_token', $guest_token)->first();
         }
-        return Inertia::render('Items/Success', ['current_id' => $current_id, 'orders' => $orders]);
+        return Inertia::render('Items/Success', ['current_id' => $current_id, 'orders' => $my_orders]);
     }
 }
