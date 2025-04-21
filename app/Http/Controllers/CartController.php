@@ -42,11 +42,9 @@ class CartController extends Controller
                 "order_id" => "12345",
             ],
         ]);
-        /*return response()->json([
+        return response()->json([
             'checkoutUrl' => $payment->getCheckoutUrl(),
-        ]);*/
-        return redirect()->away($payment->getCheckoutUrl());
-
+        ]);
     }
     public function success()
     {

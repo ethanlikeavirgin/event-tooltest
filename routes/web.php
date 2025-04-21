@@ -23,6 +23,7 @@ Route::post('/webhook/mollie', function (Request $request) {
     // $payment = Mollie::api()->payments()->get($request->id);
     return response()->json(['status' => 'received']);
 })->name('webhook.mollie');
+Route::post('/mollie/payment', [CartController::class, 'store'])->name('mollie.payment');
 /*Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),

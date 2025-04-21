@@ -52,7 +52,13 @@ export default {
 
             try {
                 const response = await axios.post('/mollie/payment', payload);
-                window.open(response.data.checkoutUrl, '_blank');
+                console.log('Mollie response:', response); // ← debug this
+
+                if (response.data?.checkoutUrl) {
+                    window.open(response.data.checkoutUrl, '_blank');
+                } else {
+                    console.error('Geen checkout URL ontvangen van Mollie.');
+                }
             } catch (error) {
                 console.error('Fout bij Mollie betaling:', error);
             }
