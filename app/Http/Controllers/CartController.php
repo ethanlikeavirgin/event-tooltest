@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
 use App\Models\Cart;
 use Mollie\Laravel\Facades\Mollie;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -27,22 +28,45 @@ class CartController extends Controller
     }
     public function store(Request $request)
     {
-        dd("this is a test");
+        $validated = $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'items' => 'required|array',
+            'total' => 'required|numeric',
+            'guest_token' => 'nullable|string',
+        ]);
+
+        // ✅ Insert into orders table
+        DB::table('orders')->insert([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'items' => json_encode($validated['items']),
+            'total' => $validated['total'],
+            'guest_token' => $validated['guest_token'] ?? null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // ✅ Get the inserted order ID
+        $orderId = DB::getPdo()->lastInsertId();
+
+        // ✅ Proceed to Mollie payment
         $mollie = new \Mollie\Api\MollieApiClient();
         $mollie->setApiKey("test_bcCAhNsRUbRMgnFJvTfAPWpEdTuKQ2");
 
         $payment = $mollie->payments->create([
             "amount" => [
                 "currency" => "EUR",
-                "value" => number_format($request->total, 2, '.', ''),
+                "value" => number_format($validated['total'], 2, '.', ''),
             ],
-            "description" => "Order #12345",
+            "description" => "Order #$orderId",
             "redirectUrl" => route('cart.success'),
             "webhookUrl" => route('webhook.mollie'),
             "metadata" => [
-                "order_id" => "12345",
+                "order_id" => $orderId,
             ],
         ]);
+
         return response()->json([
             'checkoutUrl' => $payment->getCheckoutUrl(),
         ]);
