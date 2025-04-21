@@ -75,8 +75,9 @@ class CartController extends Controller
         }
 
     }
-    public function success()
+    public function success(Request $request)
     {
-        
+        dd($request->order_id);
+        return Inertia::render('Items/Success');
     }
 }
