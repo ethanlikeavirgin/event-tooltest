@@ -50,7 +50,6 @@ class CartController extends Controller
 
     public function store(Request $request)
     {
-        // ✅ Validate the request first
         $validated = $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -59,40 +58,54 @@ class CartController extends Controller
             'guest_token' => 'nullable|string',
         ]);
 
-        // ✅ Insert order and get the ID
-        $orderId = DB::table('orders')->insertGetId([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'items' => json_encode($validated['items']),
-            'total' => $validated['total'],
-            'guest_token' => $validated['guest_token'] ?? null,
-            'status' => 'pending', // optional status column
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        try {
+            DB::beginTransaction();
 
-        // ✅ Now initialize Mollie
-        $mollie = new \Mollie\Api\MollieApiClient();
-        $mollie->setApiKey("test_bcCAhNsRUbRMgnFJvTfAPWpEdTuKQ2");
+            // Save the order
+            $orderId = DB::table('orders')->insertGetId([
+                'first_name' => $validated['first_name'],
+                'last_name' => $validated['last_name'],
+                'items' => json_encode($validated['items']),
+                'total' => $validated['total'],
+                'guest_token' => $validated['guest_token'] ?? null,
+                'status' => 'pending',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
-        // ✅ Create payment with metadata
-        $payment = $mollie->payments->create([
-            "amount" => [
-                "currency" => "EUR",
-                "value" => number_format($validated['total'], 2, '.', ''),
-            ],
-            "description" => "Order #$orderId",
-            "redirectUrl" => route('cart.success', ['order_id' => $orderId]),
-            "webhookUrl" => route('webhook.mollie'),
-            "metadata" => [
-                "order_id" => $orderId,
-            ],
-        ]);
+            // Mollie payment
+            $mollie = new \Mollie\Api\MollieApiClient();
+            $mollie->setApiKey("test_bcCAhNsRUbRMgnFJvTfAPWpEdTuKQ2");
 
-        // ✅ Return checkout URL to frontend
-        return response()->json([
-            'checkoutUrl' => $payment->getCheckoutUrl(),
-        ]);
+            $payment = $mollie->payments->create([
+                "amount" => [
+                    "currency" => "EUR",
+                    "value" => number_format($validated['total'], 2, '.', ''),
+                ],
+                "description" => "Order #$orderId",
+                "redirectUrl" => route('cart.success', ['order_id' => $orderId]),
+                "webhookUrl" => route('webhook.mollie'),
+                "metadata" => [
+                    "order_id" => $orderId,
+                ],
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'checkoutUrl' => $payment->getCheckoutUrl(),
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            \Log::error('Mollie/payment error: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => 'Something went wrong while processing your payment.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function success(Request $request)
