@@ -54,6 +54,11 @@ class CartController extends Controller
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'items' => 'required|array',
+            'items.*.item_id' => 'required|integer',
+            'items.*.name' => 'required|string',
+            'items.*.price' => 'required|numeric',
+            'items.*.counter' => 'required|integer',
+            'items.*.line_total' => 'required|numeric',
             'total' => 'required|numeric',
             'guest_token' => 'nullable|string',
         ]);

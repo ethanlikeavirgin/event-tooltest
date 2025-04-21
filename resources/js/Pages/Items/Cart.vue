@@ -49,9 +49,9 @@ export default {
                     name: item.name,
                     price: item.items.price,
                     counter: item.counter,
-                    line_total: (item.items.price * item.counter).toFixed(2),
+                    line_total: item.items.price * item.counter,
                 })),
-                total: totalPrice.value.toFixed(2),
+                total: totalPrice.value,
                 guest_token: props.guest_token,
             };
 
