@@ -1,6 +1,6 @@
 <template>
     <Container>
-        <div><span>Dit is een test - </span>{{ guest_token }}</div>
+        <div>{{ guest_token }}</div>
 
         <div v-for="item in cartitems" :key="item.id">
             {{ item.name }} - {{ item.counter }} x {{ item.items.price }} = €
@@ -8,7 +8,8 @@
         </div>
 
         <p><strong>Totaal:</strong> €{{ totalPrice.toFixed(2) }}</p>
-
+        <input type="text" v-model="firstName" placeholder="Voornaam" />
+        <input type="text" v-model="lastName" placeholder="Achternaam" />
         <button @click.prevent="submit">
             Bevestig Aankoop
         </button>
@@ -16,7 +17,7 @@
 </template>
 
 <script>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import axios from 'axios';
 import Container from '../../Components/Container.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
@@ -31,6 +32,8 @@ export default {
         AppLayout,
     },
     setup(props) {
+        const firstName = ref('');
+        const lastName = ref('');
         const totalPrice = computed(() => {
             return props.cartitems.reduce((sum, item) => {
                 return sum + (item.items.price * item.counter);
@@ -39,6 +42,8 @@ export default {
 
         const submit = async () => {
             const payload = {
+                first_name: firstName.value,
+                last_name: lastName.value,
                 items: props.cartitems.map(item => ({
                     item_id: item.id,
                     name: item.name,
@@ -67,6 +72,8 @@ export default {
         return {
             submit,
             totalPrice,
+            firstName,
+            lastName,
         };
     },
 };
