@@ -48,6 +48,6 @@ class CartController extends Controller
     }
     public function success()
     {
-        
+        return Inertia::render('Items/Success');
     }
 }

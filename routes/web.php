@@ -14,7 +14,7 @@ Route::get('/', [PurchaseController::class, 'welcome'])->name('purchase.welcome'
 Route::resource('purchase', PurchaseController::class);
 Route::resource('cart', CartController::class );
 Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
-Route::get('/success', [CartController::class, 'succes'])->name('cart.success');
+Route::get('/payment/success', [CartController::class, 'success'])->name('cart.success');
 Route::get('/items/{item}/source', [ItemController::class, 'source'])->name('items.source');
 Route::post('/webhook/mollie', function (Request $request) {
     // Optional: log the webhook for debugging
