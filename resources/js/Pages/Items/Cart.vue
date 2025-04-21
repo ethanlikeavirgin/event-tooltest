@@ -59,7 +59,7 @@ export default {
                 const response = await axios.post('/mollie/payment', payload);
 
                 if (response.data.checkoutUrl) {
-                    window.location.href = response.data.checkoutUrl;
+                    window.open(response.data.checkoutUrl, '_blank');
                 } else {
                     console.error("Geen checkout URL ontvangen van Mollie.");
                 }
