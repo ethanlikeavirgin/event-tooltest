@@ -7,7 +7,8 @@
             {{ (item.counter * item.items.price).toFixed(2) }}
         </div>
 
-        @csrf
+        <p><strong>Totaal:</strong> €{{ totalPrice.toFixed(2) }}</p>
+
         <button @click.prevent="submit">
             Bevestig Aankoop
         </button>
@@ -15,9 +16,8 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
-import axios from 'axios'; // ← make sure axios is imported
-import { useForm } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import axios from 'axios';
 import Container from '../../Components/Container.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
@@ -38,13 +38,8 @@ export default {
         });
 
         const submit = async () => {
-            if (!props.cartitems.length) {
-                console.error("Geen items in het winkelmandje.");
-                return;
-            }
-
             const payload = {
-                items: props.cartitems.map((item) => ({
+                items: props.cartitems.map(item => ({
                     item_id: item.id,
                     name: item.name,
                     price: item.items.price,
@@ -57,14 +52,9 @@ export default {
 
             try {
                 const response = await axios.post('/mollie/payment', payload);
-
-                if (response.data.checkoutUrl) {
-                    window.open(response.data.checkoutUrl, '_blank');
-                } else {
-                    console.error("Geen checkout URL ontvangen van Mollie.");
-                }
-            } catch (err) {
-                console.error("Fout bij starten van betaling:", err);
+                window.open(response.data.checkoutUrl, '_blank');
+            } catch (error) {
+                console.error('Fout bij Mollie betaling:', error);
             }
         };
 
