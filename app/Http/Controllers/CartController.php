@@ -27,6 +27,7 @@ class CartController extends Controller
     }
     public function store(Request $request)
     {
+        dd("this is a test");
         $mollie = new \Mollie\Api\MollieApiClient();
         $mollie->setApiKey("test_bcCAhNsRUbRMgnFJvTfAPWpEdTuKQ2");
 
