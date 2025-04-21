@@ -50,21 +50,36 @@ class CartController extends Controller
 
     public function store(Request $request)
     {
+        // ✅ Validate the request first
+        $validated = $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'items' => 'required|array',
+            'total' => 'required|numeric',
+            'guest_token' => 'nullable|string',
+        ]);
+
+        // ✅ Insert order and get the ID
         $orderId = DB::table('orders')->insertGetId([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'items' => json_encode($request->items),
-            'total' => $request->total,
-            'guest_token' => $request->guest_token ?? null,
-            'status' => 'pending', // <-- Track payment status
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'items' => json_encode($validated['items']),
+            'total' => $validated['total'],
+            'guest_token' => $validated['guest_token'] ?? null,
+            'status' => 'pending', // optional status column
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-        
+
+        // ✅ Now initialize Mollie
+        $mollie = new \Mollie\Api\MollieApiClient();
+        $mollie->setApiKey("test_bcCAhNsRUbRMgnFJvTfAPWpEdTuKQ2");
+
+        // ✅ Create payment with metadata
         $payment = $mollie->payments->create([
             "amount" => [
                 "currency" => "EUR",
-                "value" => number_format($request->total, 2, '.', ''),
+                "value" => number_format($validated['total'], 2, '.', ''),
             ],
             "description" => "Order #$orderId",
             "redirectUrl" => route('cart.success', ['order_id' => $orderId]),
@@ -73,8 +88,13 @@ class CartController extends Controller
                 "order_id" => $orderId,
             ],
         ]);
-        
+
+        // ✅ Return checkout URL to frontend
+        return response()->json([
+            'checkoutUrl' => $payment->getCheckoutUrl(),
+        ]);
     }
+
     public function success(Request $request)
     {
         $order = DB::table('orders')->where('id', $request->order_id)->first();
