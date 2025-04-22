@@ -3,7 +3,11 @@
         <div>
             <h1>Bedankt voor je aankoop!</h1>
             <div>Order nummer: {{ current_id }}</div>
-            <div v-if="orders"><div>{{ orders.id }}</div></div>
+            <div v-if="orders">
+                <div>{{ orders.id }}</div>
+                <div>{{ orders.items }}</div>
+                <div>{{ orders.total }}</div>
+            </div>
         </div>
     </Container>
 </template>
