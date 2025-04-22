@@ -21,7 +21,7 @@ class CartController extends Controller
         }
         $user_id = Auth::id();
         if($user_id) {
-            $cartitems = Cart::with('items')->where('auth_id', $user_id)->get();
+            $cartitems = Cart::with('items')->where('user_id', $user_id)->get();
         } else {
             $cartitems = Cart::with('items')->where('guest_token', $guestToken)->get();
         }
@@ -33,6 +33,7 @@ class CartController extends Controller
             $validated = $request->validate([
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
+                'email' => 'required|string',
                 'items' => 'required|array',
                 'total' => 'required|numeric',
             ]);
@@ -40,6 +41,7 @@ class CartController extends Controller
             $orderId = DB::table('orders')->insertGetId([
                 'first_name' => $validated['first_name'],
                 'last_name' => $validated['last_name'],
+                'email' => $validated['email'],
                 'items' => json_encode($validated['items']),
                 'total' => $validated['total'],
                 'guest_token' => $guestToken,

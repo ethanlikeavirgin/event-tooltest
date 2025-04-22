@@ -10,6 +10,7 @@
         <p><strong>Totaal:</strong> €{{ totalPrice.toFixed(2) }}</p>
         <input type="text" v-model="firstName" placeholder="Voornaam" />
         <input type="text" v-model="lastName" placeholder="Achternaam" />
+        <input type="email" v-model="email" placeholder="Email" />
         <button @click.prevent="submit">
             Bevestig Aankoop
         </button>
@@ -34,6 +35,7 @@ export default {
     setup(props) {
         const firstName = ref('');
         const lastName = ref('');
+        const Email = ref();
         const totalPrice = computed(() => {
             return props.cartitems.reduce((sum, item) => {
                 return sum + (item.items.price * item.counter);
@@ -44,6 +46,7 @@ export default {
             const payload = {
                 first_name: firstName.value,
                 last_name: lastName.value,
+                email: Email.value,
                 items: props.cartitems.map(item => ({
                     item_id: item.id,
                     name: item.name,
@@ -73,6 +76,7 @@ export default {
             totalPrice,
             firstName,
             lastName,
+            Email,
         };
     },
 };

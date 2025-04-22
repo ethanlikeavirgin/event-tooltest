@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('email');
             $table->json('items');
             $table->decimal('total', 10, 2);
             $table->string('guest_token')->nullable();
