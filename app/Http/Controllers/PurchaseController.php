@@ -81,7 +81,11 @@ class PurchaseController extends Controller
         $item->update([
             'max' => $item->max - $counter,
         ]);
-        return redirect()->route('purchase.welcome')->with('success', 'Item added to cart successfully.');
+        if(!Auth::id()) {
+            return redirect()->route('purchase.welcome')->with('success', 'Item added to cart successfully.');
+        }else {
+            return redirect()->route('purchase.index')->with('success', 'Item added to cart successfully.');
+        }
     }
 
     public function show($id)
