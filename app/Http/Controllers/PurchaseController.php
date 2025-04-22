@@ -103,6 +103,10 @@ class PurchaseController extends Controller
             $cartItem->delete(); // Correct method
         }
         
-        return redirect()->route('purchase.index')->with('success', 'Item created successfully.');
+        if(!Auth::id()) {
+            return redirect()->route('purchase.welcome')->with('success', 'Item destroyed successfully.');
+        }else {
+            return redirect()->route('purchase.index')->with('success', 'Item destroyed successfully.');
+        }
     }
 }
