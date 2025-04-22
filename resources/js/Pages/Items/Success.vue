@@ -5,7 +5,9 @@
             <div>Order nummer: {{ current_id }}</div>
             <div v-if="orders">
                 <div>{{ orders.id }}</div>
-                <div>{{ orders.items }}</div>
+                <div v-for="order in orders.items">
+                    {{ order.item_id }} - {{ order.name }} - {{ order.price }} - {{ order.counter }} - {{ order.line_total }}
+                </div>
                 <div>{{ orders.total }}</div>
             </div>
         </div>
