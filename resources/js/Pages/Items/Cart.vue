@@ -35,6 +35,7 @@ export default {
     setup(props) {
         const firstName = ref('');
         const lastName = ref('');
+        const email = ref('');
         const totalPrice = computed(() => {
             return props.cartitems.reduce((sum, item) => {
                 return sum + (item.items.price * item.counter);
