@@ -42,7 +42,7 @@ class PurchaseController extends Controller
             $cart = Cart::with('items')->where('user_id', Auth::id())->get();
         } else {
             $guestToken = $this->resolveGuestToken();
-            $cart = Cart::with('items')/*->where('guest_token', $guestToken)*/->get();
+            $cart = Cart::with('items')->where('guest_token', $guestToken)->get();
         }
 
         $totalprice = $cart->sum('total');
