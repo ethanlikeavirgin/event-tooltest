@@ -14,6 +14,19 @@ use Illuminate\Support\Str;
 
 class PurchaseController extends Controller
 {
+    private function resolveGuestToken()
+    {
+        $token = session('guest_token') ?? request()->cookie('guest_token');
+
+        if (!$token) {
+            $token = Str::uuid()->toString();
+            session(['guest_token' => $token]);
+            cookie()->queue(cookie('guest_token', $token, 60 * 24 * 30));
+        }
+
+        return $token;
+    }
+
     public function index()
     {
         $items = Item::where('max', '>=', 1)->where('item_id', '=', NULL)->get();
@@ -28,16 +41,7 @@ class PurchaseController extends Controller
         if(Auth::id()) {
             $cart = Cart::with('items')->where('user_id', Auth::id())->get();
         } else {
-            $guestToken = session('guest_token');
-            if (!$guestToken) {
-                $guestToken = request()->cookie('guest_token'); // <-- Try recover from cookie
-                if (!$guestToken) {
-                    $guestToken = Str::uuid()->toString();
-                }
-                session(['guest_token' => $guestToken]);
-            }
-            // Always refresh cookie to make sure it's synced
-            cookie()->queue(cookie('guest_token', $guestToken, 60 * 24 * 30));
+            $guestToken = $this->resolveGuestToken();
             $cart = Cart::with('items')->where('guest_token', $guestToken)->get();
         }
 
@@ -50,11 +54,7 @@ class PurchaseController extends Controller
     public function store(Request $request)
     {
         $counter = (int) $request->counter;
-        if(session('guest_token')) {
-            $guestToken = request()->cookie('guest_token');
-        } else {
-            $guestToken = '';
-        }
+        $guestToken = $this->resolveGuestToken();
         $item = Item::findOrFail($request->item_id);
         // Check available stock
         if ($counter < 1 || $counter > $item->max) {
