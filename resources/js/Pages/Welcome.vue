@@ -4,6 +4,7 @@
         <Container class="bg-gray-100 !py-4 p-10 rounded-3xl">
             <h1 class="text-4xl font-bold">Purchase Page</h1>
             <div class="pb-8">This is the purchase page content inside the container.</div>
+            {{ guesttoken }}
             <div class="relative">
                 <!-- Dropdown -->
                 <div class="fixed right-4 top-14 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg h-1/2 overflow-scroll">
@@ -66,6 +67,7 @@ export default {
         items: Array,
         cart: Array,
         totalprice: Number,
+        guesttoken: String,
     },
     components: {
         Container,

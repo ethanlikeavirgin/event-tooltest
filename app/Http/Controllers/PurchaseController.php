@@ -25,19 +25,35 @@ class PurchaseController extends Controller
     public function welcome()
     {
         $items = Item::where('max', '>=', 1)->where('item_id', '=', NULL)->get();
-        $cart = Cart::with('items')->where('user_id', Auth::id())->get();
+        if(Auth::id()) {
+            $cart = Cart::with('items')->where('user_id', Auth::id())->get();
+        } else {
+            $guestToken = session('guest_token');
+            if (!$guestToken) {
+                $guestToken = request()->cookie('guest_token'); // <-- Try recover from cookie
+                if (!$guestToken) {
+                    $guestToken = Str::uuid()->toString();
+                }
+                session(['guest_token' => $guestToken]);
+            }
+            // Always refresh cookie to make sure it's synced
+            cookie()->queue(cookie('guest_token', $guestToken, 60 * 24 * 30));
+            $cart = Cart::with('items')->where('guest_token', $guestToken)->get();
+        }
+
         $totalprice = $cart->sum('total');
         $totalprice = number_format($totalprice, 2, '.', '');
-        return Inertia::render('Welcome', ['items' => $items, 'cart' => $cart, 'totalprice' => $totalprice]);
+
+        return Inertia::render('Welcome', ['items' => $items, 'cart' => $cart, 'totalprice' => $totalprice, 'guesttoken' => $guestToken]);
     }
+
     public function store(Request $request)
     {
         $counter = (int) $request->counter;
-        $guestToken = session('guest_token');
-
-        if (!$guestToken) {
-            $guestToken = Str::uuid()->toString();
-            session(['guest_token' => $guestToken]);
+        if(session('guest_token')) {
+            $guestToken = request()->cookie('guest_token');
+        } else {
+            $guestToken = '';
         }
         $item = Item::findOrFail($request->item_id);
         // Check available stock
