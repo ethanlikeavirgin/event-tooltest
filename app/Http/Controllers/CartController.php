@@ -14,8 +14,8 @@ class CartController extends Controller
 {
     public function index()
     {
-        if(session('guest_token')) {
-            $guestToken = session('guest_token');
+        if(request()->cookie('guest_token')) {
+            $guestToken = request()->cookie('guest_token');
         }else {
             $guestToken = '';
         }
