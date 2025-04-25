@@ -48,7 +48,7 @@ class PurchaseController extends Controller
         $totalprice = $cart->sum('total');
         $totalprice = number_format($totalprice, 2, '.', '');
 
-        return Inertia::render('Welcome', ['items' => $items, 'cart' => $cart, 'totalprice' => $totalprice, 'guesttoken' => $guestToken]);
+        return Inertia::render('Welcome', ['items' => $items, 'cart' => $cart, 'totalprice' => $totalprice]);
     }
     public function store(Request $request)
     {
@@ -115,7 +115,6 @@ class PurchaseController extends Controller
     public function show($id)
     {
         $item = Item::where('id', $id)->first();
-        /*$detailitems = Item::where('item_id', $id)->get();*/
         $detailitems = Item::where('id', $id)->orWhere('item_id', $id)->get();
         return Inertia::render('Items/Detail', ['item' => $item, 'detailitems' => $detailitems]);
     }

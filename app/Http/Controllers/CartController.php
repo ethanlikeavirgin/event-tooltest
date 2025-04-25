@@ -33,12 +33,20 @@ class CartController extends Controller
             $validated = $request->validate([
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
-                'email' => 'required|string',
+                'email' => 'required|string|email',
                 'items' => 'required|array',
                 'total' => 'required|numeric',
             ]);
-            $guestToken = session('guest_token');
+
+            $userId = 1;
+            $guestToken = session('guest_token') ?? request()->cookie('guest_token');
+
+            DB::table('cart')->where('guest_token', $guestToken)->update([
+                'user_id' => $userId,
+            ]);
+            
             $orderId = DB::table('orders')->insertGetId([
+                'user_id' => $userId, // 👈 Save user_id if logged in, NULL if guest
                 'first_name' => $validated['first_name'],
                 'last_name' => $validated['last_name'],
                 'email' => $validated['email'],
@@ -55,7 +63,7 @@ class CartController extends Controller
             $payment = $mollie->payments->create([
                 "amount" => [
                     "currency" => "EUR",
-                    "value" => number_format($request->total, 2, '.', ''),
+                    "value" => number_format($validated['total'], 2, '.', ''),
                 ],
                 "description" => "Order #" . $orderId,
                 "redirectUrl" => route('cart.success', [
@@ -66,18 +74,21 @@ class CartController extends Controller
                     "order_id" => $orderId,
                 ],
             ]);
+
             return response()->json([
                 'checkoutUrl' => $payment->getCheckoutUrl(),
             ]);
+
         } catch (\Throwable $e) {
             Log::error('❌ Payment failed: ' . $e->getMessage());
+
             return response()->json([
                 'error' => 'Something went wrong.',
                 'details' => $e->getMessage(),
             ], 500);
         }
-
     }
+
     public function success(Request $request)
     {
         $guest_token = session('guest_token');
