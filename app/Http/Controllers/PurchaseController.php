@@ -50,24 +50,35 @@ class PurchaseController extends Controller
 
         return Inertia::render('Welcome', ['items' => $items, 'cart' => $cart, 'totalprice' => $totalprice, 'guesttoken' => $guestToken]);
     }
-
     public function store(Request $request)
     {
         $counter = (int) $request->counter;
         $guestToken = $this->resolveGuestToken();
         $item = Item::findOrFail($request->item_id);
+
         // Check available stock
         if ($counter < 1 || $counter > $item->max) {
             return back()->with('error', 'There are not enough tickets.');
         }
 
-        $existingCartItem = Cart::where('user_id', Auth::id())->where('item_id', $request->item_id)->first();
+        $userId = Auth::check() ? Auth::id() : null;
+
+        // Check if the cart item already exists for this user or guest
+        $existingCartItem = Cart::where('item_id', $request->item_id)
+            ->where(function ($query) use ($userId, $guestToken) {
+                if ($userId) {
+                    $query->where('user_id', $userId);
+                } else {
+                    $query->where('guest_token', $guestToken);
+                }
+            })
+            ->first();
 
         if ($existingCartItem) {
             // Update existing cart item
             $newCounter = $existingCartItem->counter + $counter;
 
-            // Check if we have enough stock
+            // Check stock
             if ($newCounter > $item->max) {
                 return back()->with('error', 'Not enough tickets available to add more.');
             }
@@ -77,17 +88,12 @@ class PurchaseController extends Controller
                 'total' => $newCounter * $request->price,
             ]);
         } else {
-            if(Auth()){
-                $user_id = Auth::id();
-            }else {
-                $user_id = '';
-            }
             // Add new item to cart
             Cart::create([
                 'name' => $request->name,
                 'item_id' => $request->item_id,
                 'counter' => $counter,
-                'user_id' => $user_id,
+                'user_id' => $userId,
                 'guest_token' => $guestToken,
                 'total' => $counter * $request->price,
             ]);
@@ -97,12 +103,14 @@ class PurchaseController extends Controller
         $item->update([
             'max' => $item->max - $counter,
         ]);
-        if(!Auth::id()) {
-            return redirect()->route('purchase.welcome')->with('success', 'Item added to cart successfully.');
-        }else {
+
+        if ($userId) {
             return redirect()->route('purchase.index')->with('success', 'Item added to cart successfully.');
+        } else {
+            return redirect()->route('purchase.welcome')->with('success', 'Item added to cart successfully.');
         }
     }
+
 
     public function show($id)
     {
