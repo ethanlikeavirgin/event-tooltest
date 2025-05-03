@@ -7,28 +7,7 @@
                 <div class="pb-8">This is the purchase page content inside the container.</div>
                 <div class="relative">
                     <!-- Dropdown -->
-                    <div class="fixed right-4 top-14 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-lg h-1/2 overflow-scroll">
-                        <!-- Cart Items -->
-                        <div class="p-4" v-for="item in cart">
-                            <div class="flex items-center mb-4">
-                                <img :src="`/storage/${item.items.file_path}`" class="w-12 h-12 rounded-md">
-                                <div class="ml-4">
-                                    <h3 class="text-sm font-medium">{{ item.name }}</h3>
-                                    <p class="text-xs text-gray-500">{{ item.counter }} Ticket(s)</p>
-                                    <a @click.prevent="removecartitem(item.id)" class="text-xs text-red-500 cursor-pointer">Remove</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Buttons -->
-                        <div class="border-t border-gray-200 px-4 py-3">
-                            <button class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                Checkout
-                            </button>
-                            <a href="#" class="block text-center text-sm text-indigo-600 mt-3 hover:underline">
-                                View Shopping Bag
-                            </a>
-                        </div>
-                    </div>
+                    <Cart :cart="cart"></Cart>
                 </div>
 
                 <div class="flex flex-wrap -mr-6">
@@ -70,6 +49,7 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import Cart from '../../Components/Cart.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 
 export default {
@@ -80,6 +60,7 @@ export default {
     },
     components: {
         Container,
+        Cart,
         AppLayout,
         Link,
     },

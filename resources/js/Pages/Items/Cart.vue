@@ -13,12 +13,16 @@
                 <p><strong>Totaal:</strong> €{{ totalPrice.toFixed(2) }}</p>
                 <div class="grid grid-cols-12 gap-8 mt-20">
                     <div class="col-span-6">
-                        <div class="bg-white/60 rounded-[35px] p-8 h-full">
+                        <div v-if="!user" class="bg-white/60 rounded-[35px] p-8 h-full">
                             <h2 class="small mb-8">Login into your account</h2>
                             <input class="main--input w-full mb-4" type="text" v-model="form.email" placeholder="Login Email" />
                             <input class="main--input w-full mb-4" type="password" v-model="form.password" placeholder="Wachtwoord" />
                             <!-- Payment Button -->
                             <button class="btn btn--primary" @click.prevent="submitLogin">Login</button>
+                        </div>
+                        <div v-else class="bg-white/60 rounded-[35px] p-8 h-full">
+                            <h2 class="small mb-8">Your are logged in</h2>
+                            <button class="btn btn--primary" @click.prevent="submitPayment">Bevestig Aankoop</button>
                         </div>
                     </div>
                     <div class="col-span-6">
@@ -76,6 +80,7 @@ export default {
     props: {
         guest_token: String,
         cartitems: Array,
+        user: Object,
     },
     components: {
         Container,
@@ -101,6 +106,11 @@ export default {
             remember: false,
         });
 
+        if(props.user) {
+            firstName.value = props.user.name;
+            lastName.value = 'develter';
+            email.value = props.user.email;
+        }
         // Submit Payment
         const submitPayment = async () => {
             const payload = {
@@ -138,7 +148,13 @@ export default {
                 remember: data.remember ? 'on' : '',
                 cartitems: props.cartitems,
             })).post(route('login'), {
-                onFinish: () => form.reset('password'),
+                onFinish: () => {
+                    form.reset('password'),
+                    submitPayment();
+                },
+                onSuccess: () => {
+                    submitPayment();
+                },
             });
         };
 

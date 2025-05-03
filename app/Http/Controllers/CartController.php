@@ -25,7 +25,7 @@ class CartController extends Controller
         } else {
             $cartitems = Cart::with('items')->where('guest_token', $guestToken)->get();
         }
-        return Inertia::render('Items/Cart', ['guest_token' => $guestToken, 'cartitems' => $cartitems]);
+        return Inertia::render('Items/Cart', ['guest_token' => $guestToken, 'cartitems' => $cartitems, 'user' => Auth::user(),]);
     }
     public function store(Request $request)
     {
