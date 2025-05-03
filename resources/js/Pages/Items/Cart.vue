@@ -110,7 +110,9 @@ export default {
             firstName.value = props.user.name;
             lastName.value = 'develter';
             email.value = props.user.email;
+            console.log(props.user);
         }
+        
         // Submit Payment
         const submitPayment = async () => {
             const payload = {
@@ -149,11 +151,7 @@ export default {
                 cartitems: props.cartitems,
             })).post(route('login'), {
                 onFinish: () => {
-                    form.reset('password'),
-                    submitPayment();
-                },
-                onSuccess: () => {
-                    submitPayment();
+                    form.reset('password');
                 },
             });
         };
