@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable(); // Add the foreign key column
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // Define the foreign key
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');
