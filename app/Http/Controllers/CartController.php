@@ -46,7 +46,7 @@ class CartController extends Controller
             ]);
             
             $orderId = DB::table('orders')->insertGetId([
-                'user_id' => $userId, // 👈 Save user_id if logged in, NULL if guest
+                /*'user_id' => $userId, // 👈 Save user_id if logged in, NULL if guest*/
                 'first_name' => $validated['first_name'],
                 'last_name' => $validated['last_name'],
                 'email' => $validated['email'],
