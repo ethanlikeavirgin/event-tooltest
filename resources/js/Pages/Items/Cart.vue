@@ -1,16 +1,42 @@
 <template>
+    <Head title="Welcome" />
+    <FrontendLayout></FrontendLayout>
+    <section class="min-h-screen bg-cover bg-center w-full h-full flex items-center hero relative" style="background-image: url('storage/files/1LNg0Sum6rv0fhoKVCFnhqScQuf2Bbrz7fZO1wh7.png')">
+        <Container>
+            <div class="relative z-10 text-lg">
+                <h1 class="small pb-12">Your info</h1>
+                <!-- Cart Items -->
+                <div v-for="item in cartitems" :key="item.id">
+                    {{ item.name }} - {{ item.counter }} x {{ item.items.price }} = €{{ (item.counter * item.items.price).toFixed(2) }}
+                </div>
+                <!-- Total Price -->
+                <p><strong>Totaal:</strong> €{{ totalPrice.toFixed(2) }}</p>
+                <div class="grid grid-cols-12 gap-8 mt-20">
+                    <div class="col-span-6">
+                        <div class="bg-white/60 rounded-[35px] p-8 h-full">
+                            <h2 class="small mb-8">Login into your account</h2>
+                            <input class="main--input w-full mb-4" type="text" v-model="form.email" placeholder="Login Email" />
+                            <input class="main--input w-full mb-4" type="password" v-model="form.password" placeholder="Wachtwoord" />
+                            <!-- Payment Button -->
+                            <button class="btn btn--primary" @click.prevent="submitLogin">Login</button>
+                        </div>
+                    </div>
+                    <div class="col-span-6">
+                        <div class="bg-white/60 rounded-[35px] p-8">
+                            <h2 class="small mb-8">Continue as guest</h2>
+                            <input class="main--input w-full mb-4" type="text" v-model="firstName" placeholder="Voornaam" />
+                            <input class="main--input w-full mb-4" type="text" v-model="lastName" placeholder="Achternaam" />
+                            <input class="main--input w-full mb-4" type="text" v-model="email" placeholder="Email" />
+
+                            <!-- Payment Button -->
+                            <button class="btn btn--primary" @click.prevent="submitPayment">Bevestig Aankoop</button>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </Container>
+    </section>
     <Container>
-        <!-- Guest token -->
-        <div>{{ guest_token }}</div>
-
-        <!-- Cart Items -->
-        <div v-for="item in cartitems" :key="item.id">
-            {{ item.name }} - {{ item.counter }} x {{ item.items.price }} = €{{ (item.counter * item.items.price).toFixed(2) }}
-        </div>
-
-        <!-- Total Price -->
-        <p><strong>Totaal:</strong> €{{ totalPrice.toFixed(2) }}</p>
-
         <!-- Payment Info -->
         <input type="text" v-model="firstName" placeholder="Voornaam" />
         <input type="text" v-model="lastName" placeholder="Achternaam" />

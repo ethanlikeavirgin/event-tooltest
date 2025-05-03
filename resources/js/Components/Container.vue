@@ -17,7 +17,7 @@
         },
         computed: {
             mergedClasses() {
-            return `mx-auto max-w-6xl px-6 ${this.class}`.trim();
+            return `mx-auto max-w-7xl w-full px-6 ${this.class}`.trim();
             },
         },
     };

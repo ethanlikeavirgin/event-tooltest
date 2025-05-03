@@ -100,15 +100,30 @@ class PurchaseController extends Controller
         }
 
         // Update item stock
-        $item->update([
+        /*$item->update([
             'max' => $item->max - $counter,
-        ]);
+        ]);*/
 
-        if ($userId) {
-            return redirect()->route('purchase.index')->with('success', 'Item added to cart successfully.');
+        /*if ($userId) {
+            return Inertia::render('Items/Cart');
         } else {
-            return redirect()->route('purchase.welcome')->with('success', 'Item added to cart successfully.');
-        }
+            return Inertia::render(component: 'Items/Cart');
+        }*/
+        $cartItems = Cart::with('items') // Make sure 'items' is a relationship on the Cart model
+            ->where(function ($query) use ($userId, $guestToken) {
+                if ($userId) {
+                    $query->where('user_id', $userId);
+                } else {
+                    $query->where('guest_token', $guestToken);
+                }
+            })
+        ->get();
+
+        // ✅ Return Inertia page with required props
+        return Inertia::render('Items/Cart', [
+            'cartitems' => $cartItems,
+            'guest_token' => $guestToken,
+        ]);
     }
 
 

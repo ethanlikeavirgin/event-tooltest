@@ -11,17 +11,62 @@
     font-weight: 100 900; /* Supports all weights */
     font-style: normal;
 }
-
 body {
     font-family: 'clashdisplay', sans-serif;
     letter-spacing: -0.5px;
 }
+h1 {
+    @apply text-8xl tracking-[-2px];
+}
+h1.small {
+    @apply text-4xl;
+}
+h2 {
+    @apply text-5xl tracking-[-3px];
+}
+h2.small {
+    @apply text-2xl tracking-[-2px];
+}
 .btn {
-    @apply px-5 py-3 text-sm rounded-[30px] duration-500;
+    @apply text-base px-5 py-4 rounded-[35px] relative block duration-700 cursor-pointer;
+}
+.btn-large {
+    @apply px-8 py-6;
+}
+.btn--white {
+    @apply bg-white text-black hover:bg-primary/40 hover:text-white border border-black/25;
 }
 .btn--primary {
-    @apply bg-blue-600 text-white hover:bg-black/40;
+    @apply bg-black text-white hover:bg-primary/40;
 }
 .main--input {
-    @apply block rounded-[30px] bg-transparent block border border-black/25;
+    @apply block px-5 py-4 rounded-[30px] bg-transparent border border-black/25;
+}
+.main--input.counter {
+    @apply block w-32 rounded-[30px] bg-transparent border border-black/25;
+}
+nav svg path {
+    @apply fill-white;
+}
+.hero {
+    @apply relative;
+}
+.hero::after {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-full block bg-gradient-to-b from-white/75 to-white z-0;
+}
+.hero.alt::after {
+    @apply bg-gradient-to-b from-white/100 via-white/85 to-white/100;
+}
+.main-card {
+    @apply bg-black p-6 rounded-[35px] min-h-[400px];
+}
+.main-card.primary {
+    @apply text-white;
+}
+.main-card.secondary {
+    @apply text-white bg-black/20 border border-black/20;
+}
+.main-card.third {
+    @apply text-black bg-white/40 border border-black/20;
 }

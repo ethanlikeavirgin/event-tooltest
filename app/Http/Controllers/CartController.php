@@ -21,7 +21,7 @@ class CartController extends Controller
         }
         $user_id = Auth::id();
         if($user_id) {
-            $cartitems = Cart::with('items')->where('user_id', $user_id)->get();
+            $cartitems = Cart::with('items')->where('guest_token', $guestToken)->get();
         } else {
             $cartitems = Cart::with('items')->where('guest_token', $guestToken)->get();
         }

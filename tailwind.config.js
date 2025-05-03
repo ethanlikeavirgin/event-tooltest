@@ -15,10 +15,12 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['clashdisplay', ...defaultTheme.fontFamily.sans],
+                sans: ['itc-avant-garde-gothic-pro', ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                'primary': '#007BFF',
             },
         },
     },
-
     plugins: [forms, typography],
 };
