@@ -106,12 +106,12 @@ export default {
             remember: false,
         });
 
-        /*if(props.user) {
+        if(props.user) {
             firstName.value = props.user.name;
             lastName.value = 'develter';
             email.value = props.user.email;
             console.log(props.user);
-        }*/
+        }:
 
         // Submit Payment
         const submitPayment = async () => {
