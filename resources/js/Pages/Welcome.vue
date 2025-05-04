@@ -141,42 +141,7 @@
                 </div>
             </div>
         </section>
-
-        <div class="py-32">
-            <Container class="bg-gray-100 !py-4 p-10 rounded-3xl">
-                <h1 class="text-4xl font-bold">Purchase Page</h1>
-                <div class="pb-8">This is the purchase page content inside the container.</div>
-                {{ guesttoken }}
-                <div class="relative">
-                    <!-- Dropdown -->
-                    <Cart :cart="cart"></Cart>
-                </div>
-                <div class="flex flex-wrap -mr-6">
-                    <div class="w-1/3" v-for="item in items" :key="item">
-                        <div class="mr-6 p-6 border border-black/20 rounded-3xl relative">
-                            <Link :href="`/purchase/${item.id}`" class="absolute -top-4 -right-4 border bg-black/20 border-black/20 w-10 h-10 flex items-center justify-center rounded-full">
-                                <span class="material-symbols-outlined text-black/80">north_east</span>
-                            </Link>
-                            <div v-if="item.file_path">
-                                <img :src="`/storage/${item.file_path}`" alt="Module Image" class="h-40 w-full object-cover object-center rounded-3xl mb-4"/>
-                            </div>
-                            <div v-else>
-                                No image available
-                            </div>
-                            <div>Product: {{ item.name }}</div>
-                            <span>Price: {{ item.price }}</span>
-                            {{ item.max }}
-                            <form @submit.prevent="submit(item.id, item.name, item.price)" class="space-y-6">
-                                <div class="flex flex-row gap-4">
-                                    <input v-model="counters[item.id]" id="counter" type="number" class="w-full main--input"/>
-                                    <button :disabled="form.processing" type="submit" class="btn btn--primary">Buy</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </Container>
-        </div>
+        <Cart :cart="cart"></Cart>
 </template>
   
 <script>
@@ -234,6 +199,8 @@ export default {
 
             // Submit the form
             form.post(route('purchase.store'), {
+                preserveScroll: true,
+                preserveState: true,
                 forceFormData: true,
                 onFinish: () => {
                     console.log(`Purchase for ${itemName} was successful.`);

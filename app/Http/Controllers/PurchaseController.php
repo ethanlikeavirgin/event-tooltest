@@ -120,10 +120,12 @@ class PurchaseController extends Controller
         ->get();
 
         // ✅ Return Inertia page with required props
-        return Inertia::render('Items/Cart', [
+        /*return Inertia::render('Items/Cart', [
             'cartitems' => $cartItems,
+            'user' => Auth::user(),
             'guest_token' => $guestToken,
-        ]);
+        ]);*/
+        return redirect()->back()->with('success', 'Item added to cart.');
     }
 
 

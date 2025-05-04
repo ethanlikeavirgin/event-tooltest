@@ -110,8 +110,7 @@ export default {
             firstName.value = props.user.name;
             lastName.value = 'develter';
             email.value = props.user.email;
-            console.log(props.user);
-        }:
+        };
 
         // Submit Payment
         const submitPayment = async () => {
@@ -153,7 +152,11 @@ export default {
                 onFinish: () => {
                     form.reset('password');
                 },
+                onSuccess: () => {
+                    window.location.reload(); // re-evaluates v-if="!user"
+                },
             });
+
         };
 
         return {

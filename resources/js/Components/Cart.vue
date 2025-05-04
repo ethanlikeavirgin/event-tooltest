@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed right-4 top-14 mt-2 w-72 h-fit bg-white border border-gray-200 rounded-lg shadow-lg overflow-scroll">
+    <div class="fixed right-4 top-14 mt-2 w-72 h-fit bg-white border border-gray-200 rounded-[35px] shadow-lg overflow-scroll">
         <div class="p-4" v-for="item in cart">
             <div class="flex items-center mb-4">
                 <img :src="`/storage/${item.items.file_path}`" class="w-12 h-12 rounded-md">
@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="border-t border-gray-200 px-4 py-3">
-            <Link :href="`/cart`" class="btn btn--primary">
+            <Link :href="`/cart`" class="btn btn--primary w-fit">
                 Checkout
             </Link>
         </div>
