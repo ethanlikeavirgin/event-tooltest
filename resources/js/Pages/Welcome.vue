@@ -143,26 +143,22 @@
         </section>
         <section>
             <div class="hidden opacity-O comment-items">
-                1. @csrf onder formulier
-                2. <form action="{{ route('posts.create') }}" method="POST" enctype="multipart/form-data"></form> -> Image submitting
-                <3. php artisan storage:link -> voor images te tonen in map + map aanmaken > storage/app/public/images
-                4. <img src="{{ asset('storage/' . $post->image) }}" width="100" /> -> images tonen
-                5. tailwind in head -> @vite(['resources/css/app.css', 'resources/js/app.js'])
+                1. @csrf onder formulier<br>
+                2. <form action="{{ route('posts.create') }}" method="POST" enctype="multipart/form-data"></form> -> Image submitting<br>
+                <3. php artisan storage:link -> voor images te tonen in map + map aanmaken > storage/app/public/images<br>
+                4. <img src="{{ asset('storage/' . $post->image) }}" width="100" /> -> images tonen<br>
+                5. tailwind in head -> @vite(['resources/css/app.css', 'resources/js/app.js'])<br>
 
-                composer create-project laravel/laravel example-app
-                .env aanpassen database
-                composer require laravel/jetstream
-                php artisan jetstream:install livewire --teams
-
-                npm install
-                npm run build
-                php artisan migrate -> Database eerst aanpassen
-
-                php artisan serve
-
-                php artisan make:model Post -m -c -f  -> (model and controller and factory (fake data))
-
-                Post::factory()->count(10)->create();  -> in DatabaseSeeder
+                composer create-project laravel/laravel example-app<br>
+                .env aanpassen database<br>
+                composer require laravel/jetstream<br>
+                php artisan jetstream:install livewire --teams<br>
+                npm install<br>
+                npm run build<br>
+                php artisan migrate -> Database eerst aanpassen<br>
+                php artisan serve<br>
+                php artisan make:model Post -m -c -f  -> (model and controller and factory (fake data))<br>
+                Post::factory()->count(10)->create();  -> in DatabaseSeeder<br>
             </div>
         </section>
         <Cart :cart="cart"></Cart>
