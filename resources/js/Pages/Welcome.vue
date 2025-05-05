@@ -144,9 +144,9 @@
         <section>
             <div class="hidden opacity-O comment-items">
                 1. @csrf onder formulier<br>
-                2. <form action="{{ route('posts.create') }}" method="POST" enctype="multipart/form-data"></form> -> Image submitting<br>
-                <3. php artisan storage:link -> voor images te tonen in map + map aanmaken > storage/app/public/images<br>
-                4. <img src="{{ asset('storage/' . $post->image) }}" width="100" /> -> images tonen<br>
+                2. form action=" route('posts.create') " method="POST" enctype="multipart/form-data" -> Image submitting<br>
+                3. php artisan storage:link -> voor images te tonen in map + map aanmaken > storage/app/public/images<br>
+                4. img src=" asset('storage/' . $post->image) " width="100" -> images tonen<br>
                 5. tailwind in head -> @vite(['resources/css/app.css', 'resources/js/app.js'])<br>
 
                 composer create-project laravel/laravel example-app<br>
