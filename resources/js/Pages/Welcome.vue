@@ -143,8 +143,8 @@
         </section>
         <section>
             <div class="hidden opacity-O comment-items">
-                <!--1. @csrf onder formulier
-                2. <form action="{{ route('posts.create') }}" method="POST" enctype="multipart/form-data"> -> Image submitting
+                1. @csrf onder formulier
+                2. <form action="{{ route('posts.create') }}" method="POST" enctype="multipart/form-data"></form> -> Image submitting
                 <3. php artisan storage:link -> voor images te tonen in map + map aanmaken > storage/app/public/images
                 4. <img src="{{ asset('storage/' . $post->image) }}" width="100" /> -> images tonen
                 5. tailwind in head -> @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -162,7 +162,7 @@
 
                 php artisan make:model Post -m -c -f  -> (model and controller and factory (fake data))
 
-                Post::factory()->count(10)->create();  -> in DatabaseSeeder-->
+                Post::factory()->count(10)->create();  -> in DatabaseSeeder
             </div>
         </section>
         <Cart :cart="cart"></Cart>
