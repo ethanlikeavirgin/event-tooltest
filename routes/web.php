@@ -33,13 +33,8 @@ Route::post('/mollie/payment', [CartController::class, 'store'])->name('mollie.p
     ]);
 });*/
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
+    /*Route::get('/dashboard', function () {return Inertia::render('Dashboard');})->name('dashboard');*/
+    Route::get('/dashboard', [CartController::class, 'index'])->name('dashboard');
     Route::resource('items', ItemController::class);
 });

@@ -32,8 +32,9 @@ class PurchaseController extends Controller
         $items = Item::where('max', '>=', 1)->where('item_id', '=', NULL)->get();
         $cart = Cart::with('items')->where('user_id', Auth::id())->get();
         $totalprice = $cart->sum('total');
-        $totalprice = number_format($totalprice, 2, '.', '');
-        return Inertia::render('Items/Purchase', ['items' => $items, 'cart' => $cart, 'totalprice' => $totalprice]);
+        /*$totalprice = number_format($totalprice, 2, '.', '');*/
+        $totalpriceitem = round($totalprice, 2);
+        return Inertia::render('Items/Purchase', ['items' => $items, 'cart' => $cart, 'totalprice' => $totalpriceitem]);
     }
     public function welcome()
     {
@@ -46,9 +47,9 @@ class PurchaseController extends Controller
         }
 
         $totalprice = $cart->sum('total');
-        $totalprice = number_format($totalprice, 2, '.', '');
-
-        return Inertia::render('Welcome', ['items' => $items, 'cart' => $cart, 'totalprice' => $totalprice]);
+        /*$totalprice = number_format($totalprice, 2, '.', '');*/
+        $totalpriceitem = round($totalprice, 2);
+        return Inertia::render('Welcome', ['items' => $items, 'cart' => $cart, 'totalprice' => $totalpriceitem]);
     }
     public function store(Request $request)
     {
@@ -137,12 +138,11 @@ class PurchaseController extends Controller
     }
     public function destroy($id)
     {
-        $cartItem = Cart::where('id', $id)->where('user_id', Auth::id())->first();
-
+        /*$cartItem = Cart::where('id', $id)->where('user_id', Auth::id())->first();*/
+        $cartItem = Cart::where('id', $id)->where('guest_token', request()->cookie('guest_token'))->first();
         if ($cartItem) {
             $cartItem->delete(); // Correct method
         }
-        
         if(!Auth::id()) {
             return redirect()->route('purchase.welcome')->with('success', 'Item destroyed successfully.');
         }else {

@@ -1,6 +1,6 @@
 <template>
     <Head title="Welcome" />
-    <FrontendLayout></FrontendLayout>
+    <FrontendLayout :auth="auth"></FrontendLayout>
         <section class="min-h-screen bg-cover bg-center w-full h-full flex items-center hero relative" style="background-image: url('storage/files/1LNg0Sum6rv0fhoKVCFnhqScQuf2Bbrz7fZO1wh7.png')">
             <Container>
                 <div class="relative z-10">
@@ -141,6 +141,30 @@
                 </div>
             </div>
         </section>
+        <section>
+            <div class="hidden opacity-O comment-items">
+                <!--1. @csrf onder formulier
+                2. <form action="{{ route('posts.create') }}" method="POST" enctype="multipart/form-data"> -> Image submitting
+                <3. php artisan storage:link -> voor images te tonen in map + map aanmaken > storage/app/public/images
+                4. <img src="{{ asset('storage/' . $post->image) }}" width="100" /> -> images tonen
+                5. tailwind in head -> @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+                composer create-project laravel/laravel example-app
+                .env aanpassen database
+                composer require laravel/jetstream
+                php artisan jetstream:install livewire --teams
+
+                npm install
+                npm run build
+                php artisan migrate -> Database eerst aanpassen
+
+                php artisan serve
+
+                php artisan make:model Post -m -c -f  -> (model and controller and factory (fake data))
+
+                Post::factory()->count(10)->create();  -> in DatabaseSeeder-->
+            </div>
+        </section>
         <Cart :cart="cart"></Cart>
 </template>
   
@@ -160,6 +184,7 @@ export default {
         cart: Array,
         totalprice: Number,
         guesttoken: String,
+        auth: Object,
     },
     components: {
         Container,

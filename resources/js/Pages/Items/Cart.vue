@@ -1,6 +1,6 @@
 <template>
     <Head title="Welcome" />
-    <FrontendLayout></FrontendLayout>
+    <FrontendLayout :auth="auth"></FrontendLayout>
     <section class="min-h-screen bg-cover bg-center w-full h-full flex items-center hero relative" style="background-image: url('storage/files/1LNg0Sum6rv0fhoKVCFnhqScQuf2Bbrz7fZO1wh7.png')">
         <Container>
             <div class="relative z-10 text-lg">
@@ -41,31 +41,34 @@
         </Container>
     </section>
     <Container>
-        <!-- Payment Info -->
-        <input type="text" v-model="firstName" placeholder="Voornaam" />
-        <input type="text" v-model="lastName" placeholder="Achternaam" />
-        <input type="text" v-model="email" placeholder="Email" />
+        <div class="hidden">
+            <!-- Payment Info -->
+            <input type="text" v-model="firstName" placeholder="Voornaam" />
+            <input type="text" v-model="lastName" placeholder="Achternaam" />
+            <input type="text" v-model="email" placeholder="Email" />
 
-        <!-- Payment Button -->
-        <button @click.prevent="submitPayment">
-            Bevestig Aankoop
-        </button>
+            <!-- Payment Button -->
+            <button @click.prevent="submitPayment">
+                Bevestig Aankoop
+            </button>
 
-        <hr />
+            <hr />
 
-        <!-- Login Form -->
-        <input type="text" v-model="form.email" placeholder="Login Email" />
-        <input type="password" v-model="form.password" placeholder="Wachtwoord" />
-        <label>
-            <input type="checkbox" v-model="form.remember" />
-            Onthoud mij
-        </label>
+            <!-- Login Form -->
+            <input type="text" v-model="form.email" placeholder="Login Email" />
+            <input type="password" v-model="form.password" placeholder="Wachtwoord" />
+            <label>
+                <input type="checkbox" v-model="form.remember" />
+                Onthoud mij
+            </label>
 
-        <!-- Login Button -->
-        <button @click.prevent="submitLogin">
-            Login
-        </button>
+            <!-- Login Button -->
+            <button @click.prevent="submitLogin">
+                Login
+            </button>
+        </div>
     </Container>
+    <Cart :cart="cartitems"></Cart>
 </template>
 
 <script>
@@ -81,6 +84,7 @@ export default {
         guest_token: String,
         cartitems: Array,
         user: Object,
+        auth: Object,
     },
     components: {
         Container,

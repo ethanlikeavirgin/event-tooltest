@@ -12,8 +12,17 @@
             </div>
         </Container>
     </nav>
+    <div v-if="auth.user">
+        <div class="fixed top-4 right-10 z-50">
+            <form @submit.prevent="logout">
+                <button type="submit" class="btn btn--primary small">Logout</button>
+            </form>
+        </div>
+    </div>
 </template>
+
 <script>
+import { router } from '@inertiajs/vue3';
 import Container from '../Components/Container.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Logo from '../Components/Logo.vue';
@@ -21,11 +30,21 @@ import Logo from '../Components/Logo.vue';
 export default {
     props: {
         guest_token: String,
+        auth: Object,
     },
     components: {
         Container,
         Logo,
         AppLayout,
     },
+    methods: {
+        logout() {
+            router.post(route('logout'), {}, {
+                onSuccess: () => {
+                    window.location.href = '/';
+                }
+            });
+        }
+    }
 }
 </script>
