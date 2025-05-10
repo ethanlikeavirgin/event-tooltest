@@ -23,10 +23,10 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 
 export default {
     props: {
-        items: Array,
         cart: Array,
+        /*items: Array,
         totalprice: Number,
-        guesttoken: String,
+        guesttoken: String,*/
     },
     components: {
         Link,
