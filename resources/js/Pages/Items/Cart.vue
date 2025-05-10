@@ -68,7 +68,7 @@
             </button>
         </div>
     </Container>
-    <!--<Cart :cart="cartitems"></Cart>-->
+    <Cart :cart="cartitems"></Cart>
     {{ cartitems }}
 </template>
 
