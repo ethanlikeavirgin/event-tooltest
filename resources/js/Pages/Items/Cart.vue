@@ -68,8 +68,7 @@
             </button>
         </div>
     </Container>
-    <Cart :cart="cartitems"></Cart>
-    {{ cartitems }}
+    <!--<Cart :cart="cartitems"></Cart>-->
 </template>
 
 <script>
@@ -104,7 +103,8 @@ export default {
         const totalPrice = computed(() => {
             if (!Array.isArray(props.cartitems)) return 0;
             return props.cartitems.reduce((sum, item) => {
-                return sum + (item.items.price * item.counter);
+                const price = parseFloat(item.items?.price ?? 0);
+                return sum + (price * item.counter);
             }, 0);
         });
 
