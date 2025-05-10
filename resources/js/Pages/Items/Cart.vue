@@ -83,7 +83,10 @@ import FrontendLayout from '@/Layouts/FrontendLayout.vue';
 export default {
     props: {
         guest_token: String,
-        cartitems: Array,
+        cartitems: {
+            type: Array,
+            default: () => [],
+        },
         user: Object,
         auth: Object,
     },
@@ -99,10 +102,12 @@ export default {
         const email = ref('');
 
         const totalPrice = computed(() => {
+            if (!Array.isArray(props.cartitems)) return 0;
             return props.cartitems.reduce((sum, item) => {
                 return sum + (item.items.price * item.counter);
             }, 0);
         });
+
 
         // Inertia login form
         const form = useForm({
