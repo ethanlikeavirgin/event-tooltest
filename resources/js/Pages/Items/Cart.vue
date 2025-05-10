@@ -1,27 +1,33 @@
 <template>
     <Head title="Welcome" />
-    <FrontendLayout :auth="auth"></FrontendLayout>
-    <section class="min-h-screen bg-cover bg-center w-full h-full flex items-center hero relative" style="background-image: url('storage/files/1LNg0Sum6rv0fhoKVCFnhqScQuf2Bbrz7fZO1wh7.png')">
+    <FrontendLayout :auth="auth" />
+    <section
+        class="min-h-screen bg-cover bg-center w-full h-full flex items-center hero relative"
+        style="background-image: url('storage/files/1LNg0Sum6rv0fhoKVCFnhqScQuf2Bbrz7fZO1wh7.png')"
+    >
         <Container>
             <div class="relative z-10 text-lg">
                 <h1 class="small pb-12">Your info</h1>
+
                 <!-- Cart Items -->
-                <div v-for="item in cartitems" :key="item.id">
-                    {{ item.name }} - {{ item.counter }} x {{ item.items.price }} = €{{ (item.counter * item.items.price).toFixed(2) }}
+                <div v-for="item in localCartitems" :key="item.id">
+                    {{ item.name }} - {{ item.counter }} x {{ item.items.price }} = €
+                    {{ (item.counter * parseFloat(item.items.price)).toFixed(2) }}
                 </div>
+
                 <!-- Total Price -->
                 <p><strong>Totaal:</strong> €{{ totalPrice.toFixed(2) }}</p>
+
                 <div class="grid grid-cols-12 gap-8 mt-20">
                     <div class="col-span-6">
                         <div v-if="!user" class="bg-white/60 rounded-[35px] p-8 h-full">
                             <h2 class="small mb-8">Login into your account</h2>
                             <input class="main--input w-full mb-4" type="text" v-model="form.email" placeholder="Login Email" />
                             <input class="main--input w-full mb-4" type="password" v-model="form.password" placeholder="Wachtwoord" />
-                            <!-- Payment Button -->
                             <button class="btn btn--primary" @click.prevent="submitLogin">Login</button>
                         </div>
                         <div v-else class="bg-white/60 rounded-[35px] p-8 h-full">
-                            <h2 class="small mb-8">Your are logged in</h2>
+                            <h2 class="small mb-8">You are logged in</h2>
                             <button class="btn btn--primary" @click.prevent="submitPayment">Bevestig Aankoop</button>
                         </div>
                     </div>
@@ -31,26 +37,21 @@
                             <input class="main--input w-full mb-4" type="text" v-model="firstName" placeholder="Voornaam" />
                             <input class="main--input w-full mb-4" type="text" v-model="lastName" placeholder="Achternaam" />
                             <input class="main--input w-full mb-4" type="text" v-model="email" placeholder="Email" />
-
-                            <!-- Payment Button -->
                             <button class="btn btn--primary" @click.prevent="submitPayment">Bevestig Aankoop</button>
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
         </Container>
     </section>
+
     <Container>
         <div class="hidden">
             <!-- Payment Info -->
             <input type="text" v-model="firstName" placeholder="Voornaam" />
             <input type="text" v-model="lastName" placeholder="Achternaam" />
             <input type="text" v-model="email" placeholder="Email" />
-
-            <!-- Payment Button -->
-            <button @click.prevent="submitPayment">
-                Bevestig Aankoop
-            </button>
+            <button @click.prevent="submitPayment">Bevestig Aankoop</button>
 
             <hr />
 
@@ -61,19 +62,16 @@
                 <input type="checkbox" v-model="form.remember" />
                 Onthoud mij
             </label>
-
-            <!-- Login Button -->
-            <button @click.prevent="submitLogin">
-                Login
-            </button>
+            <button @click.prevent="submitLogin">Login</button>
         </div>
     </Container>
-    <!--<Cart :cart="cartitems"></Cart>-->
+
+    <!-- <Cart :cart="localCartitems" /> -->
 </template>
 
 <script>
-import { computed, ref } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3'; // <- make sure you have @inertiajs/inertia-vue3 installed
+import { computed, ref, watch } from 'vue';
+import { useForm } from '@inertiajs/inertia-vue3';
 import axios from 'axios';
 import Container from '../../Components/Container.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
@@ -95,45 +93,53 @@ export default {
         FrontendLayout,
     },
     setup(props) {
-        // Payment form data
         const firstName = ref('');
         const lastName = ref('');
         const email = ref('');
 
+        const localCartitems = ref([...props.cartitems]);
+
+        // Optional: Watch for updates from parent/route change
+        watch(
+            () => props.cartitems,
+            (newVal) => {
+                // Uncomment next line to deduplicate if needed
+                // localCartitems.value = Array.from(new Map(newVal.map(item => [item.id, item])).values());
+                localCartitems.value = [...newVal];
+            },
+            { immediate: true }
+        );
+
         const totalPrice = computed(() => {
-            if (!Array.isArray(props.cartitems)) return 0;
-            return props.cartitems.reduce((sum, item) => {
+            return localCartitems.value.reduce((sum, item) => {
                 const price = parseFloat(item.items?.price ?? 0);
                 return sum + (price * item.counter);
             }, 0);
         });
 
-
-        // Inertia login form
         const form = useForm({
             email: '',
             password: '',
             remember: false,
         });
 
-        if(props.user) {
+        if (props.user) {
             firstName.value = props.user.name;
             lastName.value = 'develter';
             email.value = props.user.email;
-        };
+        }
 
-        // Submit Payment
         const submitPayment = async () => {
             const payload = {
                 first_name: firstName.value,
                 last_name: lastName.value,
                 email: email.value,
-                items: props.cartitems.map(item => ({
+                items: localCartitems.value.map(item => ({
                     item_id: item.id,
                     name: item.name,
-                    price: item.items.price,
+                    price: item.items?.price,
                     counter: item.counter,
-                    line_total: item.items.price * item.counter,
+                    line_total: parseFloat(item.items?.price ?? 0) * item.counter,
                 })),
                 total: totalPrice.value,
                 guest_token: props.guest_token,
@@ -141,7 +147,6 @@ export default {
 
             try {
                 const response = await axios.post('/mollie/payment', payload);
-                console.log('Mollie response:', response);
                 if (response.data?.checkoutUrl) {
                     window.open(response.data.checkoutUrl, '_blank');
                 } else {
@@ -152,21 +157,19 @@ export default {
             }
         };
 
-        // Submit Login
         const submitLogin = () => {
             form.transform(data => ({
                 ...data,
                 remember: data.remember ? 'on' : '',
-                cartitems: props.cartitems,
+                cartitems: localCartitems.value,
             })).post(route('login'), {
                 onFinish: () => {
                     form.reset('password');
                 },
                 onSuccess: () => {
-                    window.location.reload(); // re-evaluates v-if="!user"
+                    window.location.reload();
                 },
             });
-
         };
 
         return {
@@ -177,6 +180,7 @@ export default {
             submitPayment,
             form,
             submitLogin,
+            localCartitems,
         };
     },
 };
