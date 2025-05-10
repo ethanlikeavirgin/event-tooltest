@@ -1,10 +1,10 @@
 <template>
     <Head title="Welcome" />
+    <AppLayout v-if="auth">
     <FrontendLayout :auth="auth" />
     <section
         class="min-h-screen bg-cover bg-center w-full h-full flex items-center hero relative"
-        style="background-image: url('storage/files/1LNg0Sum6rv0fhoKVCFnhqScQuf2Bbrz7fZO1wh7.png')"
-    >
+        style="background-image: url('storage/files/1LNg0Sum6rv0fhoKVCFnhqScQuf2Bbrz7fZO1wh7.png')">
         <Container>
             <div class="relative z-10 text-lg">
                 <h1 class="small pb-12">Your info</h1>
@@ -65,8 +65,8 @@
             <button @click.prevent="submitLogin">Login</button>
         </div>
     </Container>
-
     <!-- <Cart :cart="localCartitems" /> -->
+    </AppLayout>
 </template>
 
 <script>
