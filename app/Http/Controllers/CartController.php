@@ -98,6 +98,12 @@ class CartController extends Controller
         if($orders->guest_token) {
             $my_orders = DB::table('orders')->where('id', $current_id)->where('guest_token', $guest_token)->first();
         }
+        /*____UPDATE THE STATS____*/
+        if($current_id) {
+            DB::table('orders')->where('id', $current_id)->update([
+                'status' => 'paid',
+            ]);
+        }
         return Inertia::render('Items/Success', ['current_id' => $current_id, 'orders' => $my_orders]);
     }
 }

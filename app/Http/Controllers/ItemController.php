@@ -7,6 +7,7 @@ use App\Models\Cart;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
@@ -83,7 +84,18 @@ class ItemController extends Controller
         $auth = Auth::user();
         $item = Item::where('user_id', $auth->id)->where('id', $item->id)->first();
         $carts = Cart::with('user')->where('item_id', $item->id)->get();
-        return Inertia::render('Items/Source', ['item' => $item, 'carts' => $carts]);
+        $orders = DB::table('orders')->get();
+        $sells = $orders->filter(function ($order) use ($item) {
+            $items = json_decode($order->items, true);
+            return collect($items)->contains(function ($i) use ($item) {
+                return isset($i['item_id']) && $i['item_id'] == $item->id;
+            });
+        });
+        return Inertia::render('Items/Source', [
+            'item' => $item, 
+            'carts' => $carts,
+            'sells' => $sells->values(),
+        ]);
     }
 
     /**

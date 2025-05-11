@@ -10,6 +10,9 @@
                     <div class="flex flex-col">
                         <div>
                             <span class="underline text-lg">All Sold:</span>
+                            <div v-for="sell in sells">
+                                {{ sell.counter }}
+                            </div>
                         </div>
                         
                         <div>
@@ -35,6 +38,7 @@ export default {
     props: {
         item: Object,
         carts: Array,
+        sells: Array,
     },
     components: {
         Container,
