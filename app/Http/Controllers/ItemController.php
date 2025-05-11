@@ -82,7 +82,7 @@ class ItemController extends Controller
     {
         $auth = Auth::user();
         $item = Item::where('user_id', $auth->id)->where('id', $item->id)->first();
-        $carts = Cart::with('user')->where('item_id', $item->id)->get();
+        $carts = Cart::with('user')->where('item_id', $item->item_id)->get();
 
         $orders = DB::table('orders')->get();
 

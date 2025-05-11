@@ -1,6 +1,6 @@
 <template>
     Dit is een test
-    <!--<AppLayout title="Source">-->
+    <AppLayout title="Source">
         <div class="py-32">
             <Container class="bg-gray-100 !py-4 p-10 rounded-3xl">
                 <h1 class="text-4xl font-bold">Source Page</h1>
@@ -18,19 +18,19 @@
                                 </div>
                             </div>
                         </div>
-                        <!--<div>
+                        <div>
                             <span class="underline text-lg">In Cart:</span>
                             <div v-if="carts">
                                 <div v-for="cartitem in carts">
                                     {{ cartitem.counter }} items in cart by user {{ cartitem.user.name }} - {{ cartitem.user.email }}
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
                     </div>
                 </div>
             </Container>
         </div>
-    <!--</AppLayout>-->
+    </AppLayout>
 </template>
   
 <script>
