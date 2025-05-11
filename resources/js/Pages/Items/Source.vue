@@ -22,7 +22,7 @@
                             <span class="underline text-lg">In Cart:</span>
                             <div v-if="carts">
                                 <div v-for="cartitem in carts">
-                                    {{ cartitem.counter }} items in cart <span> by user {{ cartitem.user.name }} - {{ cartitem.user.email }}</span>
+                                    {{ cartitem.counter }} items in cart <span v-if="cartitem.user"> by user {{ cartitem.user.name }} - {{ cartitem.user.email }}</span>
                                 </div>
                             </div>
                         </div>
