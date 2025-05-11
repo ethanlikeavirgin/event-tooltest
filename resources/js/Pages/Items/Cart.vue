@@ -1,13 +1,12 @@
 <template>
     <Head title="Welcome" />
-    <AppLayout v-if="auth">
     <FrontendLayout :auth="auth" />
     <section
         class="min-h-screen bg-cover bg-center w-full h-full flex items-center hero relative"
         style="background-image: url('storage/files/1LNg0Sum6rv0fhoKVCFnhqScQuf2Bbrz7fZO1wh7.png')">
         <Container>
             <div class="relative z-10 text-lg">
-                <h1 class="small pb-12">Your info</h1>
+                <h1 class="small pb-12">Your tickets</h1>
 
                 <!-- Cart Items -->
                 <div v-for="item in localCartitems" :key="item.id">
@@ -18,7 +17,18 @@
                 <!-- Total Price -->
                 <p><strong>Totaal:</strong> €{{ totalPrice.toFixed(2) }}</p>
 
-                <div class="grid grid-cols-12 gap-8 mt-20">
+                <div class="grid grid-cols-12 gap-8" v-if="auth.user">
+                    <div class="col-span-6 col-start-7">
+                        <div class="bg-white/60 text-black rounded-[35px] p-8 h-full">
+                            <span>{{ auth.user.plan_id }}</span><br>
+                            <Link :href="route('purchase.index')">Products</Link><br>
+                            <Link :href="route('items.index')">Items</Link><br>
+                            <Link :href="route('profile.show')">Profile</Link>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-12 gap-8 mt-8">
                     <div class="col-span-6">
                         <div v-if="!user" class="bg-white/60 rounded-[35px] p-8 h-full">
                             <h2 class="small mb-8">Login into your account</h2>
@@ -65,8 +75,7 @@
             <button @click.prevent="submitLogin">Login</button>
         </div>
     </Container>
-    <!-- <Cart :cart="localCartitems" /> -->
-    </AppLayout>
+    <!--<Cart :cart="localCartitems" />-->
 </template>
 
 <script>
@@ -76,6 +85,7 @@ import axios from 'axios';
 import Container from '../../Components/Container.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import FrontendLayout from '@/Layouts/FrontendLayout.vue';
+import Cart from '../../Components/Cart.vue';
 
 export default {
     props: {
@@ -91,6 +101,7 @@ export default {
         Container,
         AppLayout,
         FrontendLayout,
+        Cart,
     },
     setup(props) {
         const firstName = ref('');

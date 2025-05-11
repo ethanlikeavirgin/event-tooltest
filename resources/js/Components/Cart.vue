@@ -24,9 +24,9 @@ import { Head, Link, router, useForm } from '@inertiajs/vue3';
 export default {
     props: {
         cart: Array,
-        /*items: Array,
+        items: Array,
         totalprice: Number,
-        guesttoken: String,*/
+        guesttoken: String,
     },
     components: {
         Link,
