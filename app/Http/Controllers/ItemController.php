@@ -47,7 +47,6 @@ class ItemController extends Controller
 
         $filePath = $request->file('file') ? $request->file('file')->store('files', 'public') : null;
         $auth = Auth::user();
-
         Item::create([
             'item_id' => $request->item_id,
             'name' => $request->name,
@@ -84,17 +83,30 @@ class ItemController extends Controller
         $auth = Auth::user();
         $item = Item::where('user_id', $auth->id)->where('id', $item->id)->first();
         $carts = Cart::with('user')->where('item_id', $item->id)->get();
+
         $orders = DB::table('orders')->get();
-        $sells = $orders->filter(function ($order) use ($item) {
-            $items = json_decode($order->items, true);
-            return collect($items)->contains(function ($i) use ($item) {
-                return isset($i['item_id']) && $i['item_id'] == $item->id;
-            });
-        });
+        $sells = [];
+        foreach ($orders as $order) {
+            $decoded = json_decode($order->items, true);
+            // If still a string (double-encoded), decode again
+            if (is_string($decoded)) {
+                $decoded = json_decode($decoded, true);
+            }
+            // If not a proper array, skip
+            if (!is_array($decoded)) {
+                continue;
+            }
+            foreach ($decoded as $i) {
+                if (isset($i['item_id']) && (int) $i['item_id'] === (int) $item->id) {
+                    $sells[] = $order;
+                    break; // Found matching item in this order, no need to check further
+                }
+            }
+        }
         return Inertia::render('Items/Source', [
             'item' => $item, 
             'carts' => $carts,
-            'sells' => $sells->values(),
+            'sells' => $sells,
         ]);
     }
 
