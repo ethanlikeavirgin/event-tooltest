@@ -1,1 +1,0 @@
-import{_ as o}from"./AppLayout-BLqhWUOn.js";import{c as e,w as r,o as s,a as t}from"./app-CzT9JRA9.js";import"./_plugin-vue_export-helper-DlAUqK2U.js";const m={__name:"Dashboard",setup(n){return(_,a)=>(s(),e(o,null,{default:r(()=>a[0]||(a[0]=[t("section",null,[t("div")],-1)])),_:1}))}};export{m as default};
