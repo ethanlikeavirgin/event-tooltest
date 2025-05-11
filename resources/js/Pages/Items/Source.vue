@@ -1,4 +1,5 @@
 <template>
+    Dit is een test
     <!--<AppLayout title="Source">-->
         <div class="py-32">
             <Container class="bg-gray-100 !py-4 p-10 rounded-3xl">
@@ -9,13 +10,13 @@
                     <div class="font-medium text-xl pb-4">{{ item.name }}</div>
                     <div class="flex flex-col">
                         <div>
-                            <span class="underline text-lg">All Sold:</span>
+                            <!--<span class="underline text-lg">All Sold:</span>
                             <div v-if="sells">
                                 <div v-for="sell in sells" :key="sell.order_id">
                                     Order #{{ sell.order_id }} {{ sell.email }}<br>
                                     {{ sell.item.item_id }} - {{ sell.item.name }} - {{ sell.item.counter }} x €{{ sell.item.price }} = €{{ sell.item.line_total }}
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                         <div>
                             <span class="underline text-lg">In Cart:</span>
