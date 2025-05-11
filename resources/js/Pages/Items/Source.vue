@@ -10,6 +10,7 @@
                     <div class="flex flex-col">
                         <div>
                             <span class="underline text-lg">All Sold:</span>
+                            {{ sells}}
                             <div v-for="sell in sells">
                                 {{ sell.counter }}
                             </div>
