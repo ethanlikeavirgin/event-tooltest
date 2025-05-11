@@ -146,7 +146,7 @@ export default {
                 last_name: lastName.value,
                 email: email.value,
                 items: localCartitems.value.map(item => ({
-                    item_id: item.id,
+                    item_id: item.items?.id,
                     name: item.name,
                     price: item.items?.price,
                     counter: item.counter,
