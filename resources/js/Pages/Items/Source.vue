@@ -10,13 +10,9 @@
                     <div class="flex flex-col">
                         <div>
                             <span class="underline text-lg">All Sold:</span>
-                            <div v-for="sell in sells" :key="sell.id">
-                                <h3>Order #{{ sell.id }} ({{ sell.email }})</h3>
-                                <ul>
-                                    <li v-for="item in JSON.parse(sell.items)" :key="item.item_id">
-                                        {{ item.name }} - {{ item.counter }} x €{{ item.price }} = €{{ item.line_total }}
-                                    </li>
-                                </ul>
+                            <div v-for="sell in sells" :key="sell.order_id">
+                                Order #{{ sell.order_id }} {{ sell.email }}<br>
+                                {{ sell.item.item_id }} - {{ sell.item.name }} - {{ sell.item.counter }} x €{{ sell.item.price }} = €{{ sell.item.line_total }}
                             </div>
                         </div>
                         <div>

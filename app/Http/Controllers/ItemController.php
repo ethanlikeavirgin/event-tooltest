@@ -85,21 +85,32 @@ class ItemController extends Controller
         $carts = Cart::with('user')->where('item_id', $item->id)->get();
 
         $orders = DB::table('orders')->get();
+
         $sells = [];
+
         foreach ($orders as $order) {
             $decoded = json_decode($order->items, true);
-            // If still a string (double-encoded), decode again
+
             if (is_string($decoded)) {
                 $decoded = json_decode($decoded, true);
             }
-            // If not a proper array, skip
+
             if (!is_array($decoded)) {
                 continue;
             }
+
             foreach ($decoded as $i) {
                 if (isset($i['item_id']) && (int) $i['item_id'] === (int) $item->id) {
-                    $sells[] = $order;
-                    break; // Found matching item in this order, no need to check further
+                    // Only push the matching item, not the entire items list
+                    $sells[] = [
+                        'order_id'   => $order->id,
+                        'email'      => $order->email,
+                        'user_id'    => $order->user_id,
+                        'status'     => $order->status,
+                        'created_at' => $order->created_at,
+                        'item'       => $i, // Only this item!
+                    ];
+                    break;
                 }
             }
         }
