@@ -10,9 +10,9 @@
                         <span class="font-bold">your</span> event
                     </h1>
                 </div>
-                <div class="absolute z-10 bottom-20 max-w-6xl mx-auto w-full flex flex-row">
-                    <a class="btn btn-large btn--primary mr-6">Bekijk de events</a>
-                    <a class="btn btn-large btn--white">Contacteer ons</a>
+                <div class="absolute z-10 bottom-20 max-w-6xl mx-auto w-full flex md:flex-row flex-col md:gap-0 gap-4">
+                    <a class="btn btn-large btn--primary w-fit mr-6">Bekijk de events</a>
+                    <a class="btn btn-large btn--white w-fit">Contacteer ons</a>
                 </div>
                 <div class="fixed right-12 bottom-20 bg-white rounded-full w-16 h-16 z-50 flex items-center justify-center">
                     <span class="material-symbols-outlined">local_activity</span>
@@ -23,7 +23,7 @@
             <Container>
                 <h2 class="text-center font-bold pb-24">Checkout our <span class="text-primary">prices</span></h2>
                 <div class="grid grid-cols-12 gap-6">
-                    <div class="col-span-4">
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
                         <div class="main-card primary">
                             <span>Starter</span>
                             <div class="flex flex-row gap-2 items-end pt-4">
@@ -51,7 +51,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
                         <div class="main-card secondary">
                             <span>Starter</span>
                             <div class="flex flex-row gap-2 items-end pt-4">
@@ -79,7 +79,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-span-4">
+                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
                         <div class="main-card primary">
                             <span>Starter</span>
                             <div class="flex flex-row gap-2 items-end pt-4">
@@ -116,7 +116,7 @@
                 <Container>
                     <h2 class="text-black font-bold pb-24">Current events</h2>
                     <div class="grid grid-cols-12 gap-6">
-                        <div class="col-span-4" v-for="item in items">
+                        <div class="lg:col-span-4 md:col-span-6 col-span-12" v-for="item in items">
                             <div class="main-card third">
                                 <span>{{ item.name }}</span>
                                 <div class="flex flex-row gap-2 items-end pt-4">

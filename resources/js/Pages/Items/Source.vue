@@ -1,5 +1,4 @@
 <template>
-    Dit is een test
     <AppLayout title="Source">
         <div class="py-32">
             <Container class="bg-gray-100 !py-4 p-10 rounded-3xl">

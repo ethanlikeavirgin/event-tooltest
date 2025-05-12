@@ -16,7 +16,7 @@ body {
     letter-spacing: -0.5px;
 }
 h1 {
-    @apply text-8xl tracking-[-2px];
+    @apply md:text-8xl sm:text-6xl text-5xl tracking-[-2px];
 }
 h1.small {
     @apply text-4xl;
@@ -69,4 +69,41 @@ nav svg path {
 }
 .main-card.third {
     @apply text-black bg-white/40 border border-black/20;
+}
+.mobile-opener span {
+    @apply block w-7 h-px bg-white mb-1 cursor-pointer duration-700;
+}
+.mobile-opener.active span:nth-child(1),.mobile-opener.active span:nth-child(2)  {
+    @apply mb-0 transform;
+}
+.mobile-opener.active span:nth-child(1)  {
+    @apply transform rotate-45;
+}
+.mobile-opener.active span:nth-child(2)  {
+    @apply transform -rotate-45 -mt-px;
+}
+.mobile-opener.active span:nth-last-child(1)  {
+    @apply opacity-0;
+}
+.mobile-opener span:nth-last-child(1) {
+    @apply mb-0;
+}
+.mobile-menu-enter-active,
+.mobile-menu-leave-active {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.mobile-menu-enter-from,
+.mobile-menu-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+.mobile-menu-enter-to,
+.mobile-menu-leave-from {
+    opacity: 1;
+    transform: translateY(0);
+}
+@media only screen and (max-width: 1080px) {
+    .main-navbar {
+        max-width: calc(100% - 40px);
+    }
 }

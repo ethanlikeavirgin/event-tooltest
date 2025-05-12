@@ -17,8 +17,8 @@
                 <!-- Total Price -->
                 <p><strong>Totaal:</strong> €{{ totalPrice.toFixed(2) }}</p>
 
-                <div class="grid grid-cols-12 gap-8" v-if="auth.user">
-                    <div class="col-span-6 col-start-7">
+                <div class="grid grid-cols-12 md:gap-8 gap-4" v-if="auth.user">
+                    <div class="md:col-span-6 col-span-12 md:col-start-7">
                         <div class="bg-white/60 text-black rounded-[35px] p-8 h-full">
                             <span>{{ auth.user.plan_id }}</span><br>
                             <Link :href="route('purchase.index')">Products</Link><br>
@@ -28,8 +28,8 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-12 gap-8 mt-8">
-                    <div class="col-span-6">
+                <div class="grid grid-cols-12 md:gap-8 gap-4 mt-8">
+                    <div class="md:col-span-6 col-span-12">
                         <div v-if="!user" class="bg-white/60 rounded-[35px] p-8 h-full">
                             <h2 class="small mb-8">Login into your account</h2>
                             <input class="main--input w-full mb-4" type="text" v-model="form.email" placeholder="Login Email" />
@@ -41,7 +41,7 @@
                             <button class="btn btn--primary" @click.prevent="submitPayment">Bevestig Aankoop</button>
                         </div>
                     </div>
-                    <div class="col-span-6">
+                    <div class="md:col-span-6 col-span-12">
                         <div class="bg-white/60 rounded-[35px] p-8">
                             <h2 class="small mb-8">Continue as guest</h2>
                             <input class="main--input w-full mb-4" type="text" v-model="firstName" placeholder="Voornaam" />
