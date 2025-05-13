@@ -91,7 +91,7 @@ class CartController extends Controller
 
     public function success(Request $request)
     {
-        $guest_token = session('guest_token');
+        $guest_token = request()->cookie('guest_token');
         $current_id = $request->order_id;
         $orders = DB::table('orders')->where('id', $current_id)->first();
         $my_orders = [];
