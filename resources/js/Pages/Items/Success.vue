@@ -7,6 +7,7 @@
         <div v-if="orders">
           {{ orders }}
           <div>Bestelling ID: {{ orders.id }}</div>
+          <div>{{ orders.first_name }}</div>
           <div>
             <h2>Items:</h2>
             <ul>
