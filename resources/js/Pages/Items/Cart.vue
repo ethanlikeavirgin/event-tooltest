@@ -2,7 +2,7 @@
     <Head title="Welcome" />
     <FrontendLayout :auth="auth" />
     <section
-        class="min-h-screen bg-cover bg-center w-full h-full flex items-center hero relative"
+        class="min-h-screen bg-cover bg-center w-full h-full flex items-center hero relative py-32"
         style="background-image: url('storage/files/1LNg0Sum6rv0fhoKVCFnhqScQuf2Bbrz7fZO1wh7.png')">
         <Container>
             <div class="relative z-10 text-lg">
@@ -62,9 +62,7 @@
             <input type="text" v-model="lastName" placeholder="Achternaam" />
             <input type="text" v-model="email" placeholder="Email" />
             <button @click.prevent="submitPayment">Bevestig Aankoop</button>
-
             <hr />
-
             <!-- Login Form -->
             <input type="text" v-model="form.email" placeholder="Login Email" />
             <input type="password" v-model="form.password" placeholder="Wachtwoord" />
