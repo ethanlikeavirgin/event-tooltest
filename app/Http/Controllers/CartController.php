@@ -98,7 +98,7 @@ class CartController extends Controller
         if($orders->guest_token) {
             $my_orders = DB::table('orders')->where('id', $current_id)->where('guest_token', $guest_token)->first();
         }
-        dd($guest_token . $my_orders . $current_id);
+        dd($guest_token);
         /*____UPDATE THE STATS____*/
         if($current_id) {
             DB::table('orders')->where('id', $current_id)->update([
