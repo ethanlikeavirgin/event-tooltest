@@ -2,11 +2,11 @@
   <div class="bg-[#d2d6f5]">
     <Container>
       <div class="h-screen flex flex-col items-start justify-center text-white py-32">
-        <h1 class="text-6xl pb-8">Bedankt voor je aankoop {{ orders.first_name }} !</h1>
+        <h1 class="text-6xl pb-8">Bedankt voor je aankoop !</h1>
         <div>Order nummer: {{ current_id }}</div>
         <div v-if="orders">
+          {{ orders }}
           <div>Bestelling ID: {{ orders.id }}</div>
-
           <div>
             <h2>Items:</h2>
             <ul>
