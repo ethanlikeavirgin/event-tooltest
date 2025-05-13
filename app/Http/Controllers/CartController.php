@@ -103,6 +103,8 @@ class CartController extends Controller
             DB::table('orders')->where('id', $current_id)->update([
                 'status' => 'paid',
             ]);
+            Cart::where('guest_token', $guest_token)->delete();
+            
         }
         return Inertia::render('Items/Success', ['current_id' => $current_id, 'orders' => $my_orders]);
     }
