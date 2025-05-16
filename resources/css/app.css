@@ -11,6 +11,9 @@
     font-weight: 100 900; /* Supports all weights */
     font-style: normal;
 }
+html, body {
+    @apply scroll-smooth duration-700;
+}
 body {
     font-family: 'clashdisplay', sans-serif;
     letter-spacing: -0.5px;
@@ -69,6 +72,14 @@ nav svg path {
 }
 .main-card.third {
     @apply text-black bg-white/40 border border-black/20;
+}
+.plan-options ul li {
+    @apply relative pl-6 mb-1.5;
+}
+.plan-options ul li::after {
+    font-family: "Material Symbols Outlined";
+    content: "\e5ca";
+    @apply block h-2 w-2 absolute left-0 top-0 m-auto;
 }
 .mobile-opener span {
     @apply block w-7 h-px bg-white mb-1 cursor-pointer duration-700;

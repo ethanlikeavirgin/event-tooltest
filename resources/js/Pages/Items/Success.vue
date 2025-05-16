@@ -3,11 +3,10 @@
     <Container>
       <div class="h-screen flex flex-col items-start justify-center text-white py-32">
         <h1 class="text-6xl pb-8">Bedankt voor je aankoop!</h1>
-        <div>Order nummer: {{ current_id }}</div>
         <div v-if="orders">
           <div>Bestelling ID: {{ orders.id }}</div>
           <div>Op naam van: {{ orders.first_name }}</div>
-          <div>
+          <div class="pt-12">
             <h2>Items:</h2>
             <ul>
               <li v-for="(item, index) in parsedItems" :key="index">
@@ -15,7 +14,6 @@
               </li>
             </ul>
           </div>
-
           <div><strong>Totaalbedrag: €{{ orders.total }}</strong></div>
         </div>
       </div>

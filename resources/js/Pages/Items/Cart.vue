@@ -35,6 +35,9 @@
                             <input class="main--input w-full mb-4" type="text" v-model="form.email" placeholder="Login Email" />
                             <input class="main--input w-full mb-4" type="password" v-model="form.password" placeholder="Wachtwoord" />
                             <button class="btn btn--primary" @click.prevent="submitLogin">Login</button>
+                            <div class="pt-4">
+                                <a class="text-sm text-black underline" href="#registrationform">Or register as a new account</a>
+                            </div>
                         </div>
                         <div v-else class="bg-white/60 rounded-[35px] p-8 h-full">
                             <h2 class="small mb-8">You are logged in</h2>
@@ -50,6 +53,21 @@
                             <button class="btn btn--primary" @click.prevent="submitPayment">Bevestig Aankoop</button>
                         </div>
                     </div>
+                </div>
+
+                <div class="grid grid-cols-12 md:gap-8 gap-4 mt-8">
+                    <div class="md:col-span-6 col-span-12 bg-white/60 rounded-[35px] p-8 h-full mt-8" v-if="!user" id="registrationform">
+                        <h2 class="small mb-8">Register a new account</h2>
+                        <form @submit.prevent="submitRegister">
+                            <input class="main--input w-full mb-4" type="text" v-model="registerForm.first_name" placeholder="Voornaam" />
+                            <input class="main--input w-full mb-4" type="text" v-model="registerForm.last_name" placeholder="Achternaam" />
+                            <input class="main--input w-full mb-4" type="email" v-model="registerForm.email" placeholder="Email" />
+                            <input class="main--input w-full mb-4" type="password" v-model="registerForm.password" placeholder="Wachtwoord" />
+                            <input class="main--input w-full mb-4" type="password" v-model="registerForm.password_confirmation" placeholder="Herhaal wachtwoord" />
+                            <button class="btn btn--primary">Register</button>
+                        </form> 
+                    </div>
+                    <p v-if="registerForm.errors.email" class="text-red-500">{{ registerForm.errors.email }}</p>
                 </div>
             </div>
         </Container>
@@ -78,7 +96,8 @@
 
 <script>
 import { computed, ref, watch } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { router } from '@inertiajs/inertia';
+import { Head, useForm } from '@inertiajs/inertia-vue3';
 import axios from 'axios';
 import Container from '../../Components/Container.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
@@ -100,6 +119,7 @@ export default {
         AppLayout,
         FrontendLayout,
         Cart,
+        Head,
     },
     setup(props) {
         const firstName = ref('');
@@ -181,6 +201,30 @@ export default {
             });
         };
 
+        const registerForm = useForm({
+            first_name: '',
+            last_name: '',
+            email: '',
+            password: '',
+            password_confirmation: '',
+        });
+
+        const submitRegister = () => {
+            registerForm.transform(data => ({
+                name: `${data.first_name} ${data.last_name}`,
+                email: data.email,
+                password: data.password,
+                password_confirmation: data.password_confirmation,
+            })).post(route('register'), {
+                onSuccess: () => {
+                    router.visit('/dashboard'); // or any other route
+                },
+                onError: (errors) => {
+                    console.error("Registration errors", errors);
+                },
+            });
+        };
+
         return {
             firstName,
             lastName,
@@ -189,6 +233,8 @@ export default {
             submitPayment,
             form,
             submitLogin,
+            registerForm,
+            submitRegister,
             localCartitems,
         };
     },

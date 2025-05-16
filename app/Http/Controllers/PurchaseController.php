@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Models\Item;
 use App\Models\Cart;
+use App\Models\Plan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -45,11 +46,16 @@ class PurchaseController extends Controller
             $guestToken = $this->resolveGuestToken();
             $cart = Cart::with('items')->where('guest_token', $guestToken)->get();
         }
-
+        $plans = Plan::all();
         $totalprice = $cart->sum('total');
         /*$totalprice = number_format($totalprice, 2, '.', '');*/
         $totalpriceitem = round($totalprice, 2);
-        return Inertia::render('Welcome', ['items' => $items, 'cart' => $cart, 'totalprice' => $totalpriceitem]);
+        return Inertia::render('Welcome', [
+            'items' => $items,
+            'cart' => $cart, 
+            'totalprice' => $totalpriceitem,
+            'plans' => $plans,
+        ]);
     }
     public function store(Request $request)
     {

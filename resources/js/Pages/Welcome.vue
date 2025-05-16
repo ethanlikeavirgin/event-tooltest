@@ -10,106 +10,16 @@
                         <span class="font-bold">your</span> event
                     </h1>
                 </div>
-                <div class="absolute z-10 bottom-20 max-w-6xl mx-auto w-full flex md:flex-row flex-col md:gap-0 gap-4">
+                <div class="absolute z-10 bottom-20 max-w-6xl mx-auto sm:w-full w-fit flex md:flex-row flex-col md:gap-0 gap-4">
                     <a class="btn btn-large btn--primary w-fit mr-6">Bekijk de events</a>
                     <a class="btn btn-large btn--white w-fit">Contacteer ons</a>
                 </div>
-                <div class="fixed right-12 bottom-20 bg-white rounded-full w-16 h-16 z-50 flex items-center justify-center">
+                <div class="fixed sm:right-5 right-5 sm:bottom-20 bottom-6 shadow-black/20 shadow-lg bg-white rounded-full w-16 h-16 z-50 flex items-center justify-center">
                     <span class="material-symbols-outlined">local_activity</span>
                 </div>
             </Container>
         </section>
-        <section class="py-32">
-            <Container>
-                <h2 class="text-center font-bold pb-24">Checkout our <span class="text-primary">prices</span></h2>
-                <div class="grid grid-cols-12 gap-6">
-                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
-                        <div class="main-card primary">
-                            <span>Starter</span>
-                            <div class="flex flex-row gap-2 items-end pt-4">
-                                <h2>€ 25</h2>
-                                <span>/month</span>
-                            </div>
-                            <a class="btn btn--white w-full mt-8 text-center !rounded-xl">Order now</a>
-                            <div class="mt-8">
-                                <div class="flex flex-row gap-4">
-                                    <Checkicon></Checkicon>
-                                    <div>Unlimited events</div>
-                                </div>
-                                <div class="flex flex-row gap-4">
-                                    <Checkicon></Checkicon>
-                                    <div>Unlimited tickets</div>
-                                </div>
-                                <div class="flex flex-row gap-4">
-                                    <Checkicon></Checkicon>
-                                    <div>Your own team</div>
-                                </div>
-                                <div class="flex flex-row gap-4">
-                                    <Checkicon></Checkicon>
-                                    <div>24/7 support</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
-                        <div class="main-card secondary">
-                            <span>Starter</span>
-                            <div class="flex flex-row gap-2 items-end pt-4">
-                                <h2>€ 35</h2>
-                                <span>/month</span>
-                            </div>
-                            <a class="btn btn--white w-full mt-8 text-center !rounded-xl">Order now</a>
-                            <div class="mt-8">
-                                <div class="flex flex-row gap-4">
-                                    <Checkicon></Checkicon>
-                                    <div>Unlimited events</div>
-                                </div>
-                                <div class="flex flex-row gap-4">
-                                    <Checkicon></Checkicon>
-                                    <div>Unlimited tickets</div>
-                                </div>
-                                <div class="flex flex-row gap-4">
-                                    <Checkicon></Checkicon>
-                                    <div>Your own team</div>
-                                </div>
-                                <div class="flex flex-row gap-4">
-                                    <Checkicon></Checkicon>
-                                    <div>24/7 support</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lg:col-span-4 md:col-span-6 col-span-12">
-                        <div class="main-card primary">
-                            <span>Starter</span>
-                            <div class="flex flex-row gap-2 items-end pt-4">
-                                <h2>€ 150</h2>
-                                <span>/once</span>
-                            </div>
-                            <a class="btn btn--white w-full mt-8 text-center !rounded-xl">Order now</a>
-                            <div class="mt-8">
-                                <div class="flex flex-row gap-4">
-                                    <Checkicon></Checkicon>
-                                    <div>Unlimited events</div>
-                                </div>
-                                <div class="flex flex-row gap-4">
-                                    <Checkicon></Checkicon>
-                                    <div>Unlimited tickets</div>
-                                </div>
-                                <div class="flex flex-row gap-4">
-                                    <Checkicon></Checkicon>
-                                    <div>Your own team</div>
-                                </div>
-                                <div class="flex flex-row gap-4">
-                                    <Checkicon></Checkicon>
-                                    <div>24/7 support</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </Container>
-        </section>
+        <Plans :plans="plans"></Plans>
         <section class="bg-cover bg-center bg-repeat-y w-full h-full hero alt relative" style="background-image: url('storage/files/1LNg0Sum6rv0fhoKVCFnhqScQuf2Bbrz7fZO1wh7.png')">
             <div class="py-32">
                 <div class="relative z-10">
@@ -151,11 +61,13 @@ import Container from '../Components/Container.vue';
 import Logo from '../Components/Logo.vue';
 import Checkicon from '../Components/Checkicon.vue';
 import Cart from '../Components/Cart.vue';
+import Plans from '../Components/Plans.vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import FrontendLayout from '@/Layouts/FrontendLayout.vue';
 
 export default {
     props: {
+        plans: Array,
         items: Array,
         cart: Array,
         totalprice: Number,
@@ -166,6 +78,7 @@ export default {
         Container,
         Logo,
         Checkicon,
+        Plans,
         Cart,
         AppLayout,
         FrontendLayout,
