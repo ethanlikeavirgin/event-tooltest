@@ -36,7 +36,10 @@ export default {
     methods: {
         async purchasePlan(plan) {
             const payload = {
-                plan_id: plan.id
+                plan_id: plan.id,
+                first_name: this.auth?.user?.name?.split(' ')[0] || 'Guest',
+                last_name: this.auth?.user?.name?.split(' ')[1] || 'User',
+                email: this.auth?.user?.email || 'guest@example.com',
             };
 
             try {
