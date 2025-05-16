@@ -40,6 +40,14 @@ export default {
                 first_name: this.auth?.user?.name?.split(' ')[0] || 'Guest',
                 last_name: this.auth?.user?.name?.split(' ')[1] || 'User',
                 email: this.auth?.user?.email || 'guest@example.com',
+                items: [
+                    {
+                    name: plan.name,
+                    price: plan.price,
+                    quantity: 1,
+                    total: plan.price,
+                    }
+                ],
             };
 
             try {
