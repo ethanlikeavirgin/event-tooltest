@@ -35,39 +35,43 @@ export default {
     },
     methods: {
         async purchasePlan(plan) {
+            const totalAmount = parseFloat(plan.price); // just one plan, price is total
+
             const payload = {
-                plan_id: plan.id,
-                first_name: this.auth?.user?.name?.split(' ')[0] || 'Guest',
-                last_name: this.auth?.user?.name?.split(' ')[1] || 'User',
-                email: this.auth?.user?.email || 'guest@example.com',
-                items: [
-                    {
-                    name: plan.name,
-                    price: plan.price,
-                    quantity: 1,
-                    total: plan.price,
-                    }
-                ],
+            plan_id: plan.id,
+            first_name: this.auth?.user?.name?.split(' ')[0] || 'Guest',
+            last_name: this.auth?.user?.name?.split(' ')[1] || 'User',
+            email: this.auth?.user?.email || 'guest@example.com',
+            total: totalAmount,
+            items: [
+                {
+                name: plan.name,
+                price: plan.price,
+                quantity: 1,
+                total: totalAmount,
+                }
+            ]
             };
 
             try {
-                const response = await axios.post('/mollie/payment', payload, {
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-Inertia': false, // Important!
-                        'X-Requested-With': 'XMLHttpRequest',
-                    }
-                });
-
-                if (response.data?.checkoutUrl) {
-                    window.location.href = response.data.checkoutUrl;
-                } else {
-                    console.error('No checkout URL returned from Mollie.');
+            const response = await axios.post('/mollie/payment', payload, {
+                headers: {
+                'Accept': 'application/json',
+                'X-Inertia': false,
+                'X-Requested-With': 'XMLHttpRequest',
                 }
+            });
+
+            if (response.data?.checkoutUrl) {
+                window.location.href = response.data.checkoutUrl;
+            } else {
+                console.error('No checkout URL returned from Mollie.');
+            }
             } catch (error) {
-                console.error('Error during Mollie payment:', error);
+            console.error('Error during Mollie payment:', error.response?.data || error.message);
             }
         }
     }
+
 }
 </script>
