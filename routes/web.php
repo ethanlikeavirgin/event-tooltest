@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PlanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -24,6 +25,7 @@ Route::post('/webhook/mollie', function (Request $request) {
     return response()->json(['status' => 'received']);
 })->name('webhook.mollie');
 Route::post('/mollie/payment', [CartController::class, 'store'])->name('mollie.payment');
+Route::post('/plans/purchase', [PlanController::class, 'purchase']);
 /*Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),

@@ -10,7 +10,7 @@
                             <h2>€ {{ plan.price }}</h2>
                             <span>/once</span>
                         </div>
-                        <a class="btn btn--white w-full mt-8 text-center !rounded-xl">Order now</a>
+                        <a class="btn btn--white w-full mt-8 text-center !rounded-xl" @click="purchasePlan(plan)">Order now</a>
                         <div class="mt-8">
                             <div class="plan-options" v-html="plan.options"></div>
                         </div>
@@ -23,6 +23,7 @@
 
 <script>
 import Container from '../Components/Container.vue';
+import { router } from '@inertiajs/vue3'
 
 export default {
     props: {
@@ -31,5 +32,12 @@ export default {
     components: {
         Container,
     },
+    methods: {
+        purchasePlan(plan) {
+            router.post('/plans/purchase', {
+                plan_id: plan.id,
+            });
+        }
+    }
 }
 </script>
