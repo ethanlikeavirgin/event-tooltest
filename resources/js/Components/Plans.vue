@@ -22,8 +22,9 @@
 </template>
 
 <script>
-import Container from '../Components/Container.vue';
 import { router } from '@inertiajs/vue3'
+import axios from 'axios';
+import Container from '../Components/Container.vue';
 
 export default {
     props: {
@@ -33,10 +34,32 @@ export default {
         Container,
     },
     methods: {
-        purchasePlan(plan) {
-            router.post('/plans/purchase', {
-                plan_id: plan.id,
-            });
+        async purchasePlan(plan) {
+            // First, send the selected plan to Laravel
+            try {
+                await router.post('/plans/purchase', {
+                    plan_id: plan.id,
+                }, {
+                    preserveScroll: true,
+                    preserveState: true
+                });
+
+                // Optional payload, adjust as needed
+                const payload = {
+                    plan_id: plan.id
+                };
+
+                // Now start the Mollie payment
+                const response = await axios.post('/mollie/payment', payload);
+
+                if (response.data?.checkoutUrl) {
+                    window.open(response.data.checkoutUrl, '_blank');
+                } else {
+                    console.error('No checkout URL returned from Mollie.');
+                }
+            } catch (error) {
+                console.error('Error during purchase or Mollie payment:', error);
+            }
         }
     }
 }
