@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Plan;
 use Illuminate\Http\Request;
+use Mollie\Laravel\Facades\Mollie;
 
 class PlanController extends Controller
 {
