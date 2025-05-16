@@ -35,30 +35,26 @@ export default {
     },
     methods: {
         async purchasePlan(plan) {
-            // First, send the selected plan to Laravel
+            const payload = {
+                plan_id: plan.id
+            };
+
             try {
-                await router.post('/plans/purchase', {
-                    plan_id: plan.id,
-                }, {
-                    preserveScroll: true,
-                    preserveState: true
+                const response = await axios.post('/mollie/payment', payload, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Inertia': false, // Important!
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
                 });
 
-                // Optional payload, adjust as needed
-                const payload = {
-                    plan_id: plan.id
-                };
-
-                // Now start the Mollie payment
-                const response = await axios.post('/mollie/payment', payload);
-
                 if (response.data?.checkoutUrl) {
-                    window.open(response.data.checkoutUrl, '_blank');
+                    window.location.href = response.data.checkoutUrl;
                 } else {
                     console.error('No checkout URL returned from Mollie.');
                 }
             } catch (error) {
-                console.error('Error during purchase or Mollie payment:', error);
+                console.error('Error during Mollie payment:', error);
             }
         }
     }
