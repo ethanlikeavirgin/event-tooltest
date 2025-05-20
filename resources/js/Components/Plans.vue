@@ -10,7 +10,12 @@
                             <h2>€ {{ plan.price }}</h2>
                             <span>/once</span>
                         </div>
-                        <a class="btn btn--white w-full mt-8 text-center !rounded-xl" @click="purchasePlan(plan)">Order now</a>
+                        <a 
+                        class="btn btn--white w-full mt-8 text-center !rounded-xl cursor-pointer"
+                        @click.prevent="submit(plan)"
+                        >
+                        Add to Cart
+                        </a>
                         <div class="mt-8">
                             <div class="plan-options" v-html="plan.options"></div>
                         </div>
@@ -22,56 +27,50 @@
 </template>
 
 <script>
-import { router } from '@inertiajs/vue3'
-import axios from 'axios';
+import { useForm } from '@inertiajs/vue3';
 import Container from '../Components/Container.vue';
 
 export default {
-    props: {
-        plans: Array,
-    },
-    components: {
-        Container,
-    },
-    methods: {
-        async purchasePlan(plan) {
-            const totalAmount = parseFloat(plan.price); // just one plan, price is total
+  props: {
+    plans: Array,
+    auth: Object,
+  },
+  components: {
+    Container,
+  },
+  setup() {
+    const form = useForm({
+      item_id: '',
+      name: '',
+      price: '',
+      counter: 1,
+      type: '',
+    });
 
-            const payload = {
-            plan_id: plan.id,
-            first_name: this.auth?.user?.name?.split(' ')[0] || 'Guest',
-            last_name: this.auth?.user?.name?.split(' ')[1] || 'User',
-            email: this.auth?.user?.email || 'guest@example.com',
-            total: totalAmount,
-            items: [
-                {
-                name: plan.name,
-                price: plan.price,
-                quantity: 1,
-                total: totalAmount,
-                }
-            ]
-            };
+    const submit = (plan) => {
+      form.item_id = plan.id;
+      form.name = plan.name;
+      form.price = plan.price;
+      form.counter = 1;
+      form.type = 'plan',
 
-            try {
-            const response = await axios.post('/mollie/payment', payload, {
-                headers: {
-                'Accept': 'application/json',
-                'X-Inertia': false,
-                'X-Requested-With': 'XMLHttpRequest',
-                }
-            });
+      form.post(route('purchase.store'), {
+        preserveScroll: true,
+        preserveState: true,
+        forceFormData: true,
+        onFinish: () => {
+          console.log(`✅ Plan "${plan.name}" added to cart.`);
+        },
+        onError: (errors) => {
+          console.error('❌ Error adding plan to cart:', errors);
+        },
+      });
+    };
 
-            if (response.data?.checkoutUrl) {
-                window.location.href = response.data.checkoutUrl;
-            } else {
-                console.error('No checkout URL returned from Mollie.');
-            }
-            } catch (error) {
-            console.error('Error during Mollie payment:', error.response?.data || error.message);
-            }
-        }
-    }
-
-}
+    return {
+      submit,
+      form,
+    };
+  },
+};
 </script>

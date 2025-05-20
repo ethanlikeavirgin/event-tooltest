@@ -56,6 +56,7 @@ export default {
             item_id: '',
             name: '',
             counter: '',
+            type: '',
         });
 
         const submit = (itemId, itemName, itemPrice) => {
@@ -70,6 +71,7 @@ export default {
             form.name = itemName;
             form.price = itemPrice;
             form.counter = counter;
+            form.type = 'ticket',
 
             console.log(`Submitting for item: ${itemName} with price: ${itemPrice} and ID: ${itemId}`);
 

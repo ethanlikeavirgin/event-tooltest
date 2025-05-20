@@ -19,6 +19,7 @@ class Cart extends Model
         'user_id',
         'guest_token',
         'total',
+        'type',
     ];
 
     public function items(): BelongsTo

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // Define the foreign key
             $table->string('guest_token')->nullable();
             $table->decimal('total', 10, 2);
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }

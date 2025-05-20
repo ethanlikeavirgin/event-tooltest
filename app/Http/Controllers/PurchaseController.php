@@ -59,19 +59,23 @@ class PurchaseController extends Controller
     }
     public function store(Request $request)
     {
-        $counter = (int) $request->counter;
+        $counter = (int) $request->counter ?? 1;
         $guestToken = $this->resolveGuestToken();
-        $item = Item::findOrFail($request->item_id);
+        if($request->type === 'plan') {
+            $item = Plan::findOrFail($request->item_id);
+        } else {
+            $item = Item::findOrFail($request->item_id);
+        }
 
         // Check available stock
-        if ($counter < 1 || $counter > $item->max) {
+        /*if ($counter < 1 || $counter > $item->max) {
             return back()->with('error', 'There are not enough tickets.');
-        }
+        }*/
 
         $userId = Auth::check() ? Auth::id() : null;
 
         // Check if the cart item already exists for this user or guest
-        $existingCartItem = Cart::where('item_id', $request->item_id)
+        $existingCartItem = Cart::where('item_id', $request->item_id)->where('type', $request->type)
             ->where(function ($query) use ($userId, $guestToken) {
                 if ($userId) {
                     $query->where('user_id', $userId);
@@ -86,9 +90,9 @@ class PurchaseController extends Controller
             $newCounter = $existingCartItem->counter + $counter;
 
             // Check stock
-            if ($newCounter > $item->max) {
+            /*if ($newCounter > $item->max) {
                 return back()->with('error', 'Not enough tickets available to add more.');
-            }
+            }*/
 
             $existingCartItem->update([
                 'counter' => $newCounter,
@@ -103,6 +107,7 @@ class PurchaseController extends Controller
                 'user_id' => $userId,
                 'guest_token' => $guestToken,
                 'total' => $counter * $request->price,
+                'type' => $request->type,
             ]);
         }
 
