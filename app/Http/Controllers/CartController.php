@@ -21,9 +21,9 @@ class CartController extends Controller
         }
         $user_id = Auth::id();
         if($user_id) {
-            $cartitems = Cart::with('items')->where('guest_token', $guestToken)->get();
+            $cartitems = Cart::with('itemable')->where('guest_token', $guestToken)->get();
         } else {
-            $cartitems = Cart::with('items')->where('guest_token', $guestToken)->get();
+            $cartitems = Cart::with('itemable')->where('guest_token', $guestToken)->get();
         }
         return Inertia::render('Items/Cart', ['guest_token' => $guestToken, 'cartitems' => $cartitems, 'user' => Auth::user(),]);
     }

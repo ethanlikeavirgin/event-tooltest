@@ -13,4 +13,9 @@ class Plan extends Model
         'description',
         'options',
     ];
+
+    public function carts()
+    {
+        return $this->morphMany(Cart::class, 'itemable', 'item_type', 'item_id');
+    }
 }

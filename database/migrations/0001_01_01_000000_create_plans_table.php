@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->text('description')->nullable();
             $table->text('options')->nullable();
+            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }

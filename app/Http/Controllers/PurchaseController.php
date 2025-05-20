@@ -31,7 +31,7 @@ class PurchaseController extends Controller
     public function index()
     {
         $items = Item::where('max', '>=', 1)->where('item_id', '=', NULL)->get();
-        $cart = Cart::with('items')->where('user_id', Auth::id())->get();
+        $cart = Cart::with('itemable')->where('user_id', Auth::id())->get();
         $totalprice = $cart->sum('total');
         /*$totalprice = number_format($totalprice, 2, '.', '');*/
         $totalpriceitem = round($totalprice, 2);
@@ -41,10 +41,10 @@ class PurchaseController extends Controller
     {
         $items = Item::where('max', '>=', 1)->where('item_id', '=', NULL)->get();
         if(Auth::id()) {
-            $cart = Cart::with('items')->where('user_id', Auth::id())->get();
+            $cart = Cart::with('itemable')->where('user_id', Auth::id())->get();
         } else {
             $guestToken = $this->resolveGuestToken();
-            $cart = Cart::with('items')->where('guest_token', $guestToken)->get();
+            $cart = Cart::with('itemable')->where('guest_token', $guestToken)->get();
         }
         $plans = Plan::all();
         $totalprice = $cart->sum('total');
@@ -66,32 +66,38 @@ class PurchaseController extends Controller
         } else {
             $item = Item::findOrFail($request->item_id);
         }
-
+        
         // Check available stock
-        /*if ($counter < 1 || $counter > $item->max) {
-            return back()->with('error', 'There are not enough tickets.');
+       /*if($request->type != 'plan') {
+            if ($counter < 1 || $counter > $item->max) {
+                return back()->with('error', 'There are not enough tickets.');
+            }
         }*/
 
         $userId = Auth::check() ? Auth::id() : null;
 
         // Check if the cart item already exists for this user or guest
-        $existingCartItem = Cart::where('item_id', $request->item_id)->where('type', $request->type)
-            ->where(function ($query) use ($userId, $guestToken) {
-                if ($userId) {
-                    $query->where('user_id', $userId);
-                } else {
-                    $query->where('guest_token', $guestToken);
-                }
-            })
-            ->first();
+        $existingCartItem = Cart::where('item_id', $request->item_id)->where('type', $request->type)->where(function ($query) use ($userId, $guestToken) {
+            if ($userId) {
+                $query->where('user_id', $userId);
+            } else {
+                $query->where('guest_token', $guestToken);
+            }
+        })->first();
 
         if ($existingCartItem) {
             // Update existing cart item
-            $newCounter = $existingCartItem->counter + $counter;
+            if($request->type == 'plan') {
+                $newCounter = 1;
+            }else {
+                $newCounter = $existingCartItem->counter + $counter;
+            }
 
             // Check stock
-            /*if ($newCounter > $item->max) {
-                return back()->with('error', 'Not enough tickets available to add more.');
+            /*if($request-> type != 'plan') {
+                if ($newCounter > $item->max) {
+                    return back()->with('error', 'Not enough tickets available to add more.');
+                }
             }*/
 
             $existingCartItem->update([
@@ -102,7 +108,8 @@ class PurchaseController extends Controller
             // Add new item to cart
             Cart::create([
                 'name' => $request->name,
-                'item_id' => $request->item_id,
+                'item_id' => $item->id,
+                'item_type' => get_class($item),
                 'counter' => $counter,
                 'user_id' => $userId,
                 'guest_token' => $guestToken,
@@ -121,15 +128,13 @@ class PurchaseController extends Controller
         } else {
             return Inertia::render(component: 'Items/Cart');
         }*/
-        $cartItems = Cart::with('items') // Make sure 'items' is a relationship on the Cart model
-            ->where(function ($query) use ($userId, $guestToken) {
-                if ($userId) {
-                    $query->where('user_id', $userId);
-                } else {
-                    $query->where('guest_token', $guestToken);
-                }
-            })
-        ->get();
+        $cartItems = Cart::with('itemable')->where(function ($query) use ($userId, $guestToken) {
+            if ($userId) {
+                $query->where('user_id', $userId);
+            } else {
+                $query->where('guest_token', $guestToken);
+            }
+        })->get();
 
         // ✅ Return Inertia page with required props
         /*return Inertia::render('Items/Cart', [

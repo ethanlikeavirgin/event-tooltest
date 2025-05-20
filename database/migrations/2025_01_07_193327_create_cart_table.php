@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('cart', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('item_id'); // Add the foreign key column
-            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade'); // Define the foreign key
+            $table->unsignedBigInteger('item_id');
+            $table->string('item_type');
             $table->integer('counter');
             $table->unsignedBigInteger('user_id')->nullable(); // Add the foreign key column
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // Define the foreign key

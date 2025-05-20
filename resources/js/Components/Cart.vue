@@ -6,13 +6,20 @@
         </span>
     </a>
     <Transition name="fade-slide">
-        <div v-if="showCart && Array.isArray(cart) && cart.length > 0" class="fixed right-4 top-20 mt-2 w-72 h-fit bg-white border border-gray-200 rounded-[35px] shadow-lg overflow-scroll z-[999]">
+        <div v-if="showCart && Array.isArray(cart) && cart.length > 0" class="fixed right-4 top-20 mt-2 w-72 h-fit bg-white border border-gray-200 rounded-[35px] shadow-lg z-[999]">
             <div class="p-4" v-for="item in cart">
                 <div class="flex items-center mb-4">
-                    <img :src="`/storage/${item.items.file_path}`" class="w-12 h-12 rounded-md">
+                    <div v-if="item.itemable.file_path">
+                        <img :src="`/storage/${item.itemable.file_path}`" class="w-12 h-12 rounded-md">
+                    </div>
                     <div class="ml-4">
                         <h3 class="text-sm font-medium">{{ item.name }}</h3>
-                        <p class="text-xs text-gray-500">{{ item.counter }} Ticket(s)</p>
+                        <div v-if="item.type == 'plan'">
+                            <p class="text-xs text-gray-500">{{ item.counter }} Plan</p>
+                        </div>
+                        <div v-else>
+                            <p class="text-xs text-gray-500">{{ item.counter }} Ticket(s)</p>
+                        </div>
                         <a @click.prevent="removecartitem(item.id)" class="text-xs text-red-500 cursor-pointer">Remove</a>
                     </div>
                 </div>

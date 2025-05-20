@@ -15,6 +15,7 @@ class Cart extends Model
     protected $fillable = [
         'name',
         'item_id',
+        'item_type',
         'counter',
         'user_id',
         'guest_token',
@@ -22,9 +23,9 @@ class Cart extends Model
         'type',
     ];
 
-    public function items(): BelongsTo
+    public function itemable()
     {
-        return $this->belongsTo(Item::class, 'item_id');
+        return $this->morphTo(__FUNCTION__, 'item_type', 'item_id');
     }
     public function user()
     {

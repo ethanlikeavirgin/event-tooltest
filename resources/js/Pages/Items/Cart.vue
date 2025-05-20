@@ -10,8 +10,8 @@
 
                 <!-- Cart Items -->
                 <div v-for="item in localCartitems" :key="item.id">
-                    {{ item.name }} - {{ item.counter }} x {{ item.items.price }} = €
-                    {{ (item.counter * parseFloat(item.items.price)).toFixed(2) }}
+                    {{ item.name }} - {{ item.counter }} x {{ item.itemable.price }} = €
+                    {{ (item.counter * parseFloat(item.itemable.price)).toFixed(2) }}
                 </div>
 
                 <!-- Total Price -->
@@ -141,7 +141,7 @@ export default {
 
         const totalPrice = computed(() => {
             return localCartitems.value.reduce((sum, item) => {
-                const price = parseFloat(item.items?.price ?? 0);
+                const price = parseFloat(item.itemable?.price ?? 0);
                 return sum + (price * item.counter);
             }, 0);
         });
@@ -164,11 +164,11 @@ export default {
                 last_name: lastName.value,
                 email: email.value,
                 items: localCartitems.value.map(item => ({
-                    item_id: item.items?.id,
+                    item_id: item.itemable?.id,
                     name: item.name,
-                    price: item.items?.price,
+                    price: item.itemable?.price,
                     counter: item.counter,
-                    line_total: parseFloat(item.items?.price ?? 0) * item.counter,
+                    line_total: parseFloat(item.itemable?.price ?? 0) * item.counter,
                 })),
                 total: totalPrice.value,
                 guest_token: props.guest_token,

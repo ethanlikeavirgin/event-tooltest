@@ -21,9 +21,8 @@ class Item extends Model
         'file_path',
         'user_id',
     ];
-
-    public function items(): BelongsTo
+    public function carts()
     {
-        return $this->belongsTo(Item::class, 'item_id');
+        return $this->morphMany(Cart::class, 'itemable', 'item_type', 'item_id');
     }
 }
